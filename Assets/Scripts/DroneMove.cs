@@ -13,7 +13,7 @@ public class DroneMove : MonoBehaviour {
 	const float g0 = 9.81f;
 
 	//Speed
-	float MoveSpeed = 1000f;
+	float MoveSpeed = 3000f;
 	float tiltAmountForward = 0f;
 	float tiltAmountSwerve = 0f;
 	float tiltVelocityForward = 0f;
@@ -21,7 +21,7 @@ public class DroneMove : MonoBehaviour {
 
 	//Rotation
 	float YRotation = 0f;
-	float currentYRotation = 0f;
+	public float currentYRotation = 0f;
 	float rotationAmount = 2.5f;
 	float rotationYVelocity = 0f;
 
@@ -40,23 +40,45 @@ public class DroneMove : MonoBehaviour {
 		Swerve ();
 		PropellerForce ();
 		Rotation ();
-//		_rigidbody.AddRelativeForce (Vector3.up * upForce);
-		for (int i = 0; i < propeller.Length; i++) {
-			_rigidbody.AddForceAtPosition (Vector3.up * upForce, propeller[i].TransformPoint(propeller[i].position));
-		}
+		_rigidbody.AddRelativeForce (Vector3.up * upForce);
+//		for (int i = 0; i < propeller.Length; i++) {
+//			_rigidbody.AddForceAtPosition (Vector3.up * upForce, propeller[i].TransformPoint(propeller[i].position));
+//		}
 		_rigidbody.rotation = Quaternion.Euler (new Vector3(tiltAmountForward, currentYRotation, tiltAmountSwerve));
 		//_rigidbody.AddRelativeForce(Vector3.up * upForce/1000);
 	}
 	void PropellerForce(){
-		
+		if ((Mathf.Abs (Input.GetAxis ("Vertical")) > 0.2f) || (Mathf.Abs (Input.GetAxis ("Horizontal")) > 0.2f)) {
+			if (Input.GetKey (KeyCode.I) || Input.GetKey (KeyCode.K)) {
+				_rigidbody.velocity = _rigidbody.velocity;
+			}
+			if (!Input.GetKey (KeyCode.I) && !Input.GetKey (KeyCode.K) && !Input.GetKey (KeyCode.J) && !Input.GetKey (KeyCode.L)) {
+				_rigidbody.velocity = new Vector3(_rigidbody.velocity.x, Mathf.Lerp(_rigidbody.velocity.y, 0, Time.deltaTime * 5), _rigidbody.velocity.z);
+				upForce = 281;
+			}
+			if (!Input.GetKey (KeyCode.I) && !Input.GetKey (KeyCode.K) && (Input.GetKey (KeyCode.J) || Input.GetKey (KeyCode.L))) {
+				_rigidbody.velocity = new Vector3(_rigidbody.velocity.x, Mathf.Lerp(_rigidbody.velocity.y, 0, Time.deltaTime * 5), _rigidbody.velocity.z);
+				upForce = 110;
+			}
+			if (Input.GetKey (KeyCode.J) || Input.GetKey (KeyCode.L)) {
+				upForce = 410;
+			}
+		}
+
+		if (Mathf.Abs (Input.GetAxis ("Vertical")) < 0.2f && Mathf.Abs (Input.GetAxis ("Horizontal")) > 0.2f) {
+			upForce = 135;
+		}
 		if (Input.GetKey (KeyCode.I)) {
 			isFlying = true;
 			upForce = 400f;
+			if (Mathf.Abs (Input.GetAxis ("Horizontal")) > 0.2f) {
+				upForce = 500;
+			}
 
 		} else if (Input.GetKey (KeyCode.K)) {
 			upForce = -200f;
-		} else if ((!Input.GetKey (KeyCode.I) && !Input.GetKey (KeyCode.K)) ) {
-			upForce = 9.81f;
+		} else if ((!Input.GetKey (KeyCode.I) && !Input.GetKey (KeyCode.K)) && (Mathf.Abs (Input.GetAxis ("Vertical")) < 0.2f && Mathf.Abs (Input.GetAxis ("Horizontal")) < 0.2f)) {
+			upForce = 98.1f;
 		} 
 	}
 	void MovemenForward(){
