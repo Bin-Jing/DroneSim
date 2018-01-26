@@ -1,30 +1,3 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class TemplateAgent : Agent {
-
-
-
-	public override List<float> CollectState()
-	{
-		List<float> state = new List<float>();
-
-		return state;
-	}
-
-	public override void AgentStep(float[] act)
-	{
-
-	}
-
-	public override void AgentReset()
-	{
-
-	}
-
-	public override void AgentOnDone()
-	{
-
-	}
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:8566f186ebea290d5b8c5cee6136357b41f3643de88ad314abcca7108e14234f
+size 373

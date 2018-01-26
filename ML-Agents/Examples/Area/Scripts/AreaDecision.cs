@@ -1,20 +1,3 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class AreaDecision : MonoBehaviour, Decision {
-
-	public float[] Decide (List<float> state, List<Camera> observation, float reward, bool done, float[] memory)
-	{
-        float[] action = new float[1];
-        action[0] = Random.Range(0, 5);
-        return action;
-
-	}
-
-	public float[] MakeMemory (List<float> state, List<Camera> observation, float reward, bool done, float[] memory)
-	{
-		return default(float[]);
-		
-	}
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:d1993e195df9f702bdcae4eb48edf9ab187a0a0164f81e8dd6782bff0a886195
+size 510

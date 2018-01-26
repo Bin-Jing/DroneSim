@@ -1,31 +1,3 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class GoalInteract : MonoBehaviour
-{
-    public GameObject myAgent;
-    public GameObject myObject;
-    // Use this for initialization
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject == myObject)
-        {
-            Agent agent = myAgent.GetComponent<Agent>();
-            agent.done = true;
-            agent.reward = 1f;
-        }
-	}
-
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:c8b633505ec64fa7d6d78a5541147e9a1e290add0a15d4b652aa6f3c0bb14e5a
+size 578

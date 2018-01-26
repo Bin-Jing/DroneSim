@@ -1,23 +1,3 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class CrawlerAcademy : Academy
-{
-    public override void InitializeAcademy()
-    {
-        Monitor.verticalOffset = 1f;
-    }
-
-    public override void AcademyReset()
-    {
-
-
-    }
-
-    public override void AcademyStep()
-    {
-
-
-    }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:4b36b7cd61b4b896a9b40dd69b9c085c5b19605718c43043dd0d13bf922f974a
+size 328

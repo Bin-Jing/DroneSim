@@ -1,23 +1,3 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class PushAcademy : Academy {
-
-    public float goalSize;
-    public float blockSize;
-    public float xVariation;
-
-	public override void AcademyReset()
-	{
-        goalSize = (float)resetParameters["goal_size"];
-        blockSize = (float)resetParameters["block_size"];
-        xVariation = (float)resetParameters["x_variation"];
-	}
-
-	public override void AcademyStep()
-	{
-
-	}
-
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:71a2d1fb817915cfb9dbfb6a639f485e795166590ceeb24a7161eee3a01a6927
+size 470

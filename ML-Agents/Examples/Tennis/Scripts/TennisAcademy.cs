@@ -1,17 +1,3 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
-
-public class TennisAcademy : Academy
-{
-
-    public override void AcademyReset()
-    {
-    }
-
-    public override void AcademyStep()
-    {
-    }
-
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:f2643cf3638407743d3a62430d105aed12b264a4c4b749d16491bad26889efe4
+size 252

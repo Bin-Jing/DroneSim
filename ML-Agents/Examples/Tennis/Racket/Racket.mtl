@@ -1,11 +1,3 @@
-# Blender MTL File: 'None'
-# Material Count: 1
-
-newmtl None
-Ns 0
-Ka 0.000000 0.000000 0.000000
-Kd 0.8 0.8 0.8
-Ks 0.8 0.8 0.8
-d 1
-illum 2
-map_Kd RacketTex.png
+version https://git-lfs.github.com/spec/v1
+oid sha256:499b7f9c78a0fbec0839f1b7442c1185fdf69dbb1e748081f76bbf97defe83b4
+size 158

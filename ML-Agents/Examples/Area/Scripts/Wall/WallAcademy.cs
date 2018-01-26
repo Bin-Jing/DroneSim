@@ -1,21 +1,3 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class WallAcademy : Academy {
-
-    public float minWallHeight;
-    public float maxWallHeight;
-
-	public override void AcademyReset()
-	{
-        minWallHeight = (float)resetParameters["min_wall_height"];
-        maxWallHeight = (float)resetParameters["max_wall_height"];
-	}
-
-	public override void AcademyStep()
-	{
-
-    }
-
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:3cd94744d0bdc80e1b21224d1a91751be276620c41340e7cf1d3e5c844b0dc4f
+size 413
