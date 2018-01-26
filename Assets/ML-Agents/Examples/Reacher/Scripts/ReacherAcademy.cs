@@ -1,3 +1,23 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:f453fd1d9b8968754cc54f362d0cc18f3f2c68dfe4301055a9cc0b3a03831c9d
-size 386
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class ReacherAcademy : Academy {
+
+    public float goalSize;
+    public float goalSpeed;
+
+
+	public override void AcademyReset()
+	{
+        goalSize = (float)resetParameters["goal_size"];
+        goalSpeed = (float)resetParameters["goal_speed"];
+	}
+
+	public override void AcademyStep()
+	{
+
+
+	}
+
+}

@@ -1,3 +1,22 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:ace8ce902790896afd19c8afdf1f61e1628dc381cd10b7f6ca74d0ef8c504263
-size 751
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+using System;
+[System.Serializable]
+/// Contains exceptions specific to ML-Agents.
+public class UnityAgentsException : System.Exception
+{
+    /// When a UnityAgentsException is called, the timeScale is set to 0.
+    /// The simulation will end since no steps will be taken.
+    public UnityAgentsException(string message) : base(message)
+    {
+        Time.timeScale = 0f;
+    }
+
+    /// A constructor is needed for serialization when an exception propagates 
+    /// from a remoting server to the client. 
+    protected UnityAgentsException(System.Runtime.Serialization.SerializationInfo info,
+        System.Runtime.Serialization.StreamingContext context)
+    { }
+}

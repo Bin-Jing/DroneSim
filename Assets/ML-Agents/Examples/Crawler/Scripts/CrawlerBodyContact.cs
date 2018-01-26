@@ -1,3 +1,19 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:1946c52bc6c93550468e946bbc3a3bbca8f38cdbcd95037f02153d7dd1abd489
-size 440
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class CrawlerBodyContact : MonoBehaviour {
+
+    CrawlerAgentConfigurable agent;
+
+    void Start(){
+        agent = gameObject.transform.parent.gameObject.GetComponent<CrawlerAgentConfigurable>();
+    }
+
+    void OnTriggerEnter(Collider other){
+        if (other.gameObject.name == "Ground")
+        {
+            agent.fell = true;
+        }
+    }
+}

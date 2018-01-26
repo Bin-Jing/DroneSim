@@ -1,3 +1,21 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:479a94171b946a190b3efaf7812e9d83f53e435986e2e651cff6b98d5ba60a7f
-size 591
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class CameraFollow : MonoBehaviour {
+
+	public Transform target;
+	Vector3 offset;
+
+	// Use this for initialization
+	void Start () {
+		offset = gameObject.transform.position - target.position;
+	}
+	
+	// Update is called once per frame
+	void Update () {
+        //gameObject.transform.position = target.position + offset;
+        Vector3 newPosition = new Vector3(target.position.x + offset.x, transform.position.y, target.position.z + offset.z);
+        gameObject.transform.position = newPosition;
+	}
+}

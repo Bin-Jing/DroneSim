@@ -1,3 +1,22 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:659532f8cbf8839732ee4590427934d74dc8307c7aed96b4c81e7e825289c84d
-size 568
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class ReacherDecision : MonoBehaviour, Decision {
+
+	public float[] Decide (List<float> state, List<Camera> observation, float reward, bool done, float[] memory)
+	{
+        float[] action = new float[4];
+        for (int i = 0; i < 4; i++) {
+            action[i] = Random.Range(-1f, 1f);
+        }
+        return action;
+
+	}
+
+	public float[] MakeMemory (List<float> state, List<Camera> observation, float reward, bool done, float[] memory)
+	{
+		return default(float[]);
+		
+	}
+}

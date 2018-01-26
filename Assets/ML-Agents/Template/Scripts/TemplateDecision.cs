@@ -1,3 +1,19 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:d68a91436dec9e925612cc8eb3424099e043c75ab0f0b26bdfdd800f2a20f959
-size 459
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class TemplateDecision : MonoBehaviour, Decision
+{
+
+    public float[] Decide(List<float> state, List<Camera> observation, float reward, bool done, float[] memory)
+    {
+        return new float[0];
+
+    }
+
+    public float[] MakeMemory(List<float> state, List<Camera> observation, float reward, bool done, float[] memory)
+    {
+        return new float[0];
+		
+    }
+}
