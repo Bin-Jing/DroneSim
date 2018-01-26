@@ -1,3 +1,145 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:3a23bfc0829ec6b488b4c8f609c98e48020cb4b7f064b62d993269f978adcecd
-size 3856
+fileFormatVersion: 2
+guid: fe5a6c6cbdaa347f5bd8b52c20bd9f16
+timeCreated: 1516865418
+licenseType: Free
+ModelImporter:
+  serializedVersion: 22
+  fileIDToRecycleName:
+    100000: Circle
+    100002: //RootNode
+    100004: Helice1
+    100006: Helice2
+    100008: Helice3
+    100010: Helice4
+    400000: Circle
+    400002: //RootNode
+    400004: Helice1
+    400006: Helice2
+    400008: Helice3
+    400010: Helice4
+    2300000: Circle
+    2300002: Helice1
+    2300004: Helice2
+    2300006: Helice3
+    2300008: Helice4
+    3300000: Circle
+    3300002: Helice1
+    3300004: Helice2
+    3300006: Helice3
+    3300008: Helice4
+    4300000: Helice4
+    4300002: Helice3
+    4300004: Helice2
+    4300006: Helice1
+    4300008: Circle
+    7400000: Helice4|Cube.001Action.001
+    7400002: Helice4|Cube.002Action.001
+    7400004: Helice4|Cube.003Action.001
+    7400006: Helice3|Cube.001Action.001
+    7400008: Helice3|Cube.002Action.001
+    7400010: Helice3|Cube.003Action.001
+    7400012: Helice2|Cube.001Action.001
+    7400014: Helice2|Cube.002Action.001
+    7400016: Helice2|Cube.003Action.001
+    7400018: Helice1|Cube.001Action.001
+    7400020: Helice1|Cube.002Action.001
+    7400022: Helice1|Cube.003Action.001
+    9500000: //RootNode
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: AtiraDrone
+    second: {fileID: 2100000, guid: 2425867b10c424697b2d59af86499415, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: DroneCorpo
+    second: {fileID: 2100000, guid: f810791c9117e40818ec643d6771e6ac, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Helice
+    second: {fileID: 2100000, guid: c504ab1a5550a4d8abfa7a6ac5ff637a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: MiraDrone
+    second: {fileID: 2100000, guid: c49a3cf5ce6f541da804abfae621c6f7, type: 2}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 0
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
