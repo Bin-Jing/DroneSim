@@ -118,6 +118,11 @@ GameObject:
   m_PrefabParentObject: {fileID: 1949307498976890, guid: 426ded0d65c0e47ea8c68363a133a621,
     type: 2}
   m_PrefabInternal: {fileID: 304235740}
+--- !u!4 &115117953 stripped
+Transform:
+  m_PrefabParentObject: {fileID: 4019126562732922, guid: 426ded0d65c0e47ea8c68363a133a621,
+    type: 2}
+  m_PrefabInternal: {fileID: 304235740}
 --- !u!95 &115117956
 Animator:
   serializedVersion: 3
@@ -138,6 +143,11 @@ Animator:
 --- !u!1 &252900654 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 1271286618975186, guid: 426ded0d65c0e47ea8c68363a133a621,
+    type: 2}
+  m_PrefabInternal: {fileID: 304235740}
+--- !u!4 &252900655 stripped
+Transform:
+  m_PrefabParentObject: {fileID: 4034706774611118, guid: 426ded0d65c0e47ea8c68363a133a621,
     type: 2}
   m_PrefabInternal: {fileID: 304235740}
 --- !u!95 &252900658
@@ -309,6 +319,41 @@ Prefab:
       propertyPath: m_LocalEulerAnglesHint.y
       value: 90
       objectReference: {fileID: 0}
+    - target: {fileID: 54659254434548188, guid: 426ded0d65c0e47ea8c68363a133a621,
+        type: 2}
+      propertyPath: m_Drag
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 54659254434548188, guid: 426ded0d65c0e47ea8c68363a133a621,
+        type: 2}
+      propertyPath: m_CollisionDetection
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114309735167646518, guid: 426ded0d65c0e47ea8c68363a133a621,
+        type: 2}
+      propertyPath: HeliceDownR
+      value: 
+      objectReference: {fileID: 252900655}
+    - target: {fileID: 114309735167646518, guid: 426ded0d65c0e47ea8c68363a133a621,
+        type: 2}
+      propertyPath: HeliceUpR
+      value: 
+      objectReference: {fileID: 115117953}
+    - target: {fileID: 114309735167646518, guid: 426ded0d65c0e47ea8c68363a133a621,
+        type: 2}
+      propertyPath: HeliceUpL
+      value: 
+      objectReference: {fileID: 1794616634}
+    - target: {fileID: 114309735167646518, guid: 426ded0d65c0e47ea8c68363a133a621,
+        type: 2}
+      propertyPath: HeliceDownL
+      value: 
+      objectReference: {fileID: 511474905}
+    - target: {fileID: 114448881757407522, guid: 426ded0d65c0e47ea8c68363a133a621,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 95241257376953094, guid: 426ded0d65c0e47ea8c68363a133a621, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 426ded0d65c0e47ea8c68363a133a621, type: 2}
@@ -316,6 +361,11 @@ Prefab:
 --- !u!1 &511474904 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 1171176266501220, guid: 426ded0d65c0e47ea8c68363a133a621,
+    type: 2}
+  m_PrefabInternal: {fileID: 304235740}
+--- !u!4 &511474905 stripped
+Transform:
+  m_PrefabParentObject: {fileID: 4843651184148098, guid: 426ded0d65c0e47ea8c68363a133a621,
     type: 2}
   m_PrefabInternal: {fileID: 304235740}
 --- !u!95 &511474908
@@ -449,9 +499,30 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1400664170 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1525347438238244, guid: 426ded0d65c0e47ea8c68363a133a621,
+    type: 2}
+  m_PrefabInternal: {fileID: 304235740}
+--- !u!114 &1400664174
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1400664170}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29449eafd92ee4d3b81dfbf3fbb21daa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1794616633 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 1974602908352456, guid: 426ded0d65c0e47ea8c68363a133a621,
+    type: 2}
+  m_PrefabInternal: {fileID: 304235740}
+--- !u!4 &1794616634 stripped
+Transform:
+  m_PrefabParentObject: {fileID: 4075324931678292, guid: 426ded0d65c0e47ea8c68363a133a621,
     type: 2}
   m_PrefabInternal: {fileID: 304235740}
 --- !u!95 &1794616637
