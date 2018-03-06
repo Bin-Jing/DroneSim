@@ -8,6 +8,8 @@ public class ConstValue : MonoBehaviour {
 	const float linear_drag_coefficient = 1.3f / 4.0f;
 	const float angular_drag_coefficient = linear_drag_coefficient;
 	const float restitution = 0.15f;
+
+
 	public float GetEarthRadius(){
 		return EarthRadius;
 	}
@@ -20,5 +22,9 @@ public class ConstValue : MonoBehaviour {
 	public float GetCang(){
 		return angular_drag_coefficient;
 	}
+	public float GetRestitution(){
+		return restitution;
+	}
+
 
 }
