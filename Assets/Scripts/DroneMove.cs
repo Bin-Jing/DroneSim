@@ -17,12 +17,12 @@ public class DroneMove : MonoBehaviour {
 
 	//Forice
 	public float upForce = 0f;
-	public float droneWeight = 10f;
+	float droneWeight = 1f;
 
 	float _gravity = 9.81f;
 
 	//Speed
-	float MoveSpeed = 100f;
+	float MoveSpeed = 10f;
 	float tiltAmountForward = 0f;
 	float tiltAmountSwerve = 0f;
 	float tiltVelocityForward = 0f;
@@ -70,29 +70,29 @@ public class DroneMove : MonoBehaviour {
 			}
 			if (!Input.GetKey (KeyCode.I) && !Input.GetKey (KeyCode.K) && !Input.GetKey (KeyCode.J) && !Input.GetKey (KeyCode.L)) {
 				_rigidbody.velocity = new Vector3(_rigidbody.velocity.x, Mathf.Lerp(_rigidbody.velocity.y, 0, Time.deltaTime * 5), _rigidbody.velocity.z);
-				upForce = 281;
+				upForce = 28.1f;
 			}
 			if (!Input.GetKey (KeyCode.I) && !Input.GetKey (KeyCode.K) && (Input.GetKey (KeyCode.J) || Input.GetKey (KeyCode.L))) {
 				_rigidbody.velocity = new Vector3(_rigidbody.velocity.x, Mathf.Lerp(_rigidbody.velocity.y, 0, Time.deltaTime * 5), _rigidbody.velocity.z);
-				upForce = 110;
+				upForce = 11f;
 			}
 			if (Input.GetKey (KeyCode.J) || Input.GetKey (KeyCode.L)) {
-				upForce = 410;
+				upForce = 41f;
 			}
 		}
 
 		if (Mathf.Abs (Input.GetAxis ("Vertical")) < 0.2f && Mathf.Abs (Input.GetAxis ("Horizontal")) > 0.2f) {
-			upForce = 135;
+			upForce = 13.5f;
 		}
 		if (Input.GetKey (KeyCode.I)) {
 			isFlying = true;
-			upForce = 400f;
+			upForce = 40f;
 			if (Mathf.Abs (Input.GetAxis ("Horizontal")) > 0.2f) {
-				upForce = 500;
+				upForce = 50f;
 			}
 
 		} else if (Input.GetKey (KeyCode.K)) {
-			upForce = -200f;
+			upForce = -20f;
 		} else if ((!Input.GetKey (KeyCode.I) && !Input.GetKey (KeyCode.K)) && (Mathf.Abs (Input.GetAxis ("Vertical")) < 0.2f && Mathf.Abs (Input.GetAxis ("Horizontal")) < 0.2f)) {
 			upForce = _constv.GetGravity();
 		} 

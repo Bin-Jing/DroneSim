@@ -180,7 +180,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4148826870258830, guid: 426ded0d65c0e47ea8c68363a133a621, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 5.09
+      value: 0.35
       objectReference: {fileID: 0}
     - target: {fileID: 4148826870258830, guid: 426ded0d65c0e47ea8c68363a133a621, type: 2}
       propertyPath: m_LocalPosition.z
@@ -352,6 +352,23 @@ Prefab:
     - target: {fileID: 114448881757407522, guid: 426ded0d65c0e47ea8c68363a133a621,
         type: 2}
       propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4148826870258830, guid: 426ded0d65c0e47ea8c68363a133a621, type: 2}
+      propertyPath: m_LocalScale.x
+      value: 0.13
+      objectReference: {fileID: 0}
+    - target: {fileID: 4148826870258830, guid: 426ded0d65c0e47ea8c68363a133a621, type: 2}
+      propertyPath: m_LocalScale.y
+      value: 0.13
+      objectReference: {fileID: 0}
+    - target: {fileID: 4148826870258830, guid: 426ded0d65c0e47ea8c68363a133a621, type: 2}
+      propertyPath: m_LocalScale.z
+      value: 0.13
+      objectReference: {fileID: 0}
+    - target: {fileID: 114309735167646518, guid: 426ded0d65c0e47ea8c68363a133a621,
+        type: 2}
+      propertyPath: droneWeight
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
