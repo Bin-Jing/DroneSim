@@ -14,6 +14,7 @@ public class ConstValue : MonoBehaviour {
 	const float max_rpm = 6396.667f;
 	const float propeller_diameter = 0.2f;
 
+
 	public float GetEarthRadius(){
 		return EarthRadius;
 	}

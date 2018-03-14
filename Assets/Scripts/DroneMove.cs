@@ -4,7 +4,7 @@ using UnityEngine;
 
 
 public class DroneMove : MonoBehaviour {
-	ConstValue _constv;
+	ConstValue _constval;
 	Rigidbody _rigidbody;
 	bool isFlying = false;
 
@@ -17,7 +17,7 @@ public class DroneMove : MonoBehaviour {
 
 	//Forice
 	public float upForce = 0f;
-	float droneWeight = 1f;
+	float droneWeight = 3f;
 
 	float _gravity = 9.81f;
 
@@ -27,6 +27,7 @@ public class DroneMove : MonoBehaviour {
 	float tiltAmountSwerve = 0f;
 	float tiltVelocityForward = 0f;
 	float tiltVelocitySwerve = 0f;
+	float joinForces = 0;
 
 	//Rotation
 	float YRotation = 0f;
@@ -36,16 +37,15 @@ public class DroneMove : MonoBehaviour {
 
 	// Use this for initialization
 	void Awake () {
-		_constv = GetComponent<ConstValue> ();
+		_constval = GetComponent<ConstValue> ();
 		_rigidbody = GetComponent<Rigidbody>();
 		transform = GetComponent<Transform> ();
-		Physics.gravity = new Vector3(0, -_constv.GetGravity() * droneWeight, 0);
-		_gravity = _constv.GetGravity ();
+
+		_gravity = _constval.GetGravity ();
 	}
 	
 	// Update is called once per frame
 	void FixedUpdate () {
-		
 		updateEnvironmentForce ();
 
 		if (Input.GetKey (KeyCode.Z)) {
@@ -55,59 +55,61 @@ public class DroneMove : MonoBehaviour {
 		Swerve ();
 		PropellerForce ();
 		Rotation ();
-
+		updateLinearDrag ();
 
 		AddHeliceForce ();
 		_rigidbody.AddRelativeForce (Vector3.up * upForce);
+		_rigidbody.AddForce (new Vector3(0, -_gravity*droneWeight,0));
 
 
 		_rigidbody.rotation = Quaternion.Euler (new Vector3(tiltAmountForward, currentYRotation, tiltAmountSwerve));
 	}
 	void PropellerForce(){
 		if ((Mathf.Abs (Input.GetAxis ("Vertical")) > 0.2f) || (Mathf.Abs (Input.GetAxis ("Horizontal")) > 0.2f)) {
-			if (Input.GetKey (KeyCode.I) || Input.GetKey (KeyCode.K)) {
+			if (Input.GetAxis("FlyUp") != 0) {
 				_rigidbody.velocity = _rigidbody.velocity;
 			}
-			if (!Input.GetKey (KeyCode.I) && !Input.GetKey (KeyCode.K) && !Input.GetKey (KeyCode.J) && !Input.GetKey (KeyCode.L)) {
+			if (Input.GetAxis("FlyUp") == 0 && !Input.GetKey (KeyCode.J) && !Input.GetKey (KeyCode.L)) {
 				_rigidbody.velocity = new Vector3(_rigidbody.velocity.x, Mathf.Lerp(_rigidbody.velocity.y, 0, Time.deltaTime * 5), _rigidbody.velocity.z);
-				upForce = 28.1f;
+				upForce = 0;//28.1f;
 			}
-			if (!Input.GetKey (KeyCode.I) && !Input.GetKey (KeyCode.K) && (Input.GetKey (KeyCode.J) || Input.GetKey (KeyCode.L))) {
+			if (Input.GetAxis("FlyUp") == 0 && (Input.GetKey (KeyCode.J) || Input.GetKey (KeyCode.L))) {
 				_rigidbody.velocity = new Vector3(_rigidbody.velocity.x, Mathf.Lerp(_rigidbody.velocity.y, 0, Time.deltaTime * 5), _rigidbody.velocity.z);
-				upForce = 11f;
+				upForce = 0;//11f;
 			}
 			if (Input.GetKey (KeyCode.J) || Input.GetKey (KeyCode.L)) {
-				upForce = 41f;
+				upForce = 0;//41f;
 			}
 		}
 
 		if (Mathf.Abs (Input.GetAxis ("Vertical")) < 0.2f && Mathf.Abs (Input.GetAxis ("Horizontal")) > 0.2f) {
-			upForce = 13.5f;
+			upForce = 0;//13.5f;
 		}
-		if (Input.GetKey (KeyCode.I)) {
-			isFlying = true;
-			upForce = 40f;
-			if (Mathf.Abs (Input.GetAxis ("Horizontal")) > 0.2f) {
-				upForce = 50f;
-			}
+		if (Mathf.Abs(Input.GetAxis("FlyUp")) >= 0.3f) {
+			
+//			isFlying = true;
+			upForce = _constval.GetC_T () * _constval.GetAirDensity () * Mathf.Pow (_constval.GetMaxRMP(), 2) 
+				* Mathf.Pow (_constval.GetPropellerDiameter (), 4) * Input.GetAxis ("FlyUp")/100;
+//			if (Mathf.Abs (Input.GetAxis ("Horizontal")) > 0.2f) {
+//				upForce = 50f;
+//			}
 
-		} else if (Input.GetKey (KeyCode.K)) {
-			upForce = -20f;
-		} else if ((!Input.GetKey (KeyCode.I) && !Input.GetKey (KeyCode.K)) && (Mathf.Abs (Input.GetAxis ("Vertical")) < 0.2f && Mathf.Abs (Input.GetAxis ("Horizontal")) < 0.2f)) {
-			upForce = _constv.GetGravity();
 		} 
 		print (_rigidbody.velocity);
+		if(Input.GetAxis("FlyUp") == 0){
+			upForce = _constval.GetGravity()*droneWeight;
+		}
 	}
 	void MovemenForward(){
 		if (Input.GetAxis ("Vertical") != 0) {
-			//_rigidbody.AddRelativeForce (Vector3.forward * MoveSpeed * Input.GetAxis ("Vertical"));
-			tiltAmountForward = Mathf.SmoothDamp (tiltAmountForward, 20 * Input.GetAxis ("Vertical"), ref tiltVelocityForward, 0.1f);
+			_rigidbody.AddRelativeForce (Vector3.forward * MoveSpeed * Input.GetAxis ("Vertical"));
+			tiltAmountForward = Mathf.SmoothDamp (tiltAmountForward, 30 * Input.GetAxis ("Vertical"), ref tiltVelocityForward, 0.1f);
 		}
 	}
 	void Swerve(){
 		if (Input.GetAxis ("Horizontal") != 0) {
-			//_rigidbody.AddRelativeForce (Vector3.right * MoveSpeed * Input.GetAxis ("Horizontal"));
-			tiltAmountSwerve = Mathf.SmoothDamp (tiltAmountSwerve, -20 * Input.GetAxis ("Horizontal"), ref tiltVelocitySwerve, 0.1f);
+			_rigidbody.AddRelativeForce (Vector3.right * MoveSpeed * Input.GetAxis ("Horizontal"));
+			tiltAmountSwerve = Mathf.SmoothDamp (tiltAmountSwerve, -30 * Input.GetAxis ("Horizontal"), ref tiltVelocitySwerve, 0.1f);
 		}
 	}
 	void Rotation(){
@@ -121,8 +123,8 @@ public class DroneMove : MonoBehaviour {
 
 	}
 	void updateEnvironmentForce(){
-		_gravity = _constv.GetGravity() * (1 - (transform.position.y/_constv.GetEarthRadius()));
-		Physics.gravity = new Vector3 (0, -_gravity * droneWeight, 0);
+		_gravity = _constval.GetGravity() * (1 - (transform.position.y/_constval.GetEarthRadius()));
+//		print (_gravity);
 	}
 	void AddHeliceForce(){
 //		Vector3 worldForcePosition1 = HeliceUpL.TransformPoint(HeliceUpL.position);
@@ -133,5 +135,10 @@ public class DroneMove : MonoBehaviour {
 //		_rigidbody.AddForceAtPosition(Vector3.up * upForce, worldForcePosition2);
 //		_rigidbody.AddForceAtPosition(Vector3.up * upForce, worldForcePosition3);
 //		_rigidbody.AddForceAtPosition(Vector3.up * upForce, worldForcePosition4);
+	}
+	void updateLinearDrag(){
+		float absVelocity = Mathf.Pow(Mathf.Pow(_rigidbody.velocity.x,2)+Mathf.Pow(_rigidbody.velocity.y,2)+Mathf.Pow(_rigidbody.velocity.z,2),0.5f);
+		_rigidbody.drag = (float)(0.5 * (Mathf.Pow(absVelocity,2)*_constval.GetAirDensity()*_constval.GetClin()*0.015f));
+//		print (_rigidbody.drag);
 	}
 }
