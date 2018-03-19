@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ConstValue : MonoBehaviour {
+	GameObject player;
+	DroneMove Drone;
 	const float EarthRadius = 6378100;
 	const float g0 = 9.81f;
 	const float linear_drag_coefficient = 1.3f / 4.0f;
@@ -14,6 +16,10 @@ public class ConstValue : MonoBehaviour {
 	const float max_rpm = 6396.667f;
 	const float propeller_diameter = 0.2f;
 
+	void Start(){
+		player = GameObject.FindGameObjectWithTag ("Player");
+		Drone = player.GetComponent<DroneMove>();
+	}
 
 	public float GetEarthRadius(){
 		return EarthRadius;
@@ -24,13 +30,13 @@ public class ConstValue : MonoBehaviour {
 	public float GetClin(){
 		return linear_drag_coefficient;
 	}
-	public float GetCang(){
+	public float GetC_AngularDrag(){
 		return angular_drag_coefficient;
 	}
 	public float GetRestitution(){
 		return restitution;
 	}
-	public float GetC_P(){
+	public float GetC_Pow(){
 		return power_coefficient;
 	}
 	public float GetC_T(){
@@ -47,5 +53,8 @@ public class ConstValue : MonoBehaviour {
 	}
 	public float GetAngularVelocity(){
 		return max_rpm * 2 * Mathf.PI / 60;
+	}
+	public float GetInertia(){
+		return Drone.droneWeight * Mathf.Pow (propeller_diameter / 2f, 2);
 	}
 }
