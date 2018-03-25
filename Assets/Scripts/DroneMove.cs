@@ -113,7 +113,7 @@ public class DroneMove : MonoBehaviour {
 	}
 	void MovemenForward(){
 		if (Input.GetAxis ("Vertical") != 0) {
-			_rigidbody.AddRelativeForce (Vector3.forward * 100 * Mathf.Abs (Mathf.Sin(_rigidbody.rotation.eulerAngles.x * Mathf.PI /180))
+			_rigidbody.AddRelativeForce (Vector3.forward * upForce * Mathf.Abs (Mathf.Sin(_rigidbody.rotation.eulerAngles.x * Mathf.PI /180))
 				* Input.GetAxis ("Vertical"));
 			_rigidbody.AddRelativeTorque (Vector3.forward * (1f/(2*Mathf.PI)) * _constval.GetC_Pow () * _constval.GetAirDensity () * Mathf.Pow (_constval.GetAngularVelocity(), 2)
 				* Mathf.Pow (_constval.GetPropellerDiameter (), 5) * Input.GetAxis ("FlyUp"));
@@ -122,7 +122,7 @@ public class DroneMove : MonoBehaviour {
 	}
 	void Swerve(){
 		if (Input.GetAxis ("Horizontal") != 0) {
-			_rigidbody.AddRelativeForce (Vector3.right * 100 * Mathf.Abs (Mathf.Sin(_rigidbody.rotation.eulerAngles.z* Mathf.PI /180)) 
+			_rigidbody.AddRelativeForce (Vector3.right * upForce * Mathf.Abs (Mathf.Sin(_rigidbody.rotation.eulerAngles.z* Mathf.PI /180)) 
 				* Input.GetAxis ("Horizontal"));
 			_rigidbody.AddRelativeTorque (Vector3.right * (1f/(2*Mathf.PI)) * _constval.GetC_Pow () * _constval.GetAirDensity () * Mathf.Pow (_constval.GetAngularVelocity(), 2)
 				* Mathf.Pow (_constval.GetPropellerDiameter (), 5) * Input.GetAxis ("FlyUp"));
@@ -154,22 +154,24 @@ public class DroneMove : MonoBehaviour {
 //		_rigidbody.AddForceAtPosition(Vector3.up * upForce, worldForcePosition4);
 	}
 	void updateLinearDrag(){
-		float sinx = Mathf.Sin (_rigidbody.rotation.eulerAngles.x * Mathf.PI /180);
-		float cosx = Mathf.Cos (_rigidbody.rotation.eulerAngles.x * Mathf.PI /180);
-		float sinz = Mathf.Sin (_rigidbody.rotation.eulerAngles.z * Mathf.PI /180);
-		float cosz = Mathf.Cos (_rigidbody.rotation.eulerAngles.z * Mathf.PI /180);
-		float cosy = Mathf.Cos (_rigidbody.rotation.eulerAngles.y * Mathf.PI /180);
+		float sinx = Mathf.Abs (Mathf.Sin (_rigidbody.rotation.eulerAngles.x * Mathf.PI /180));
+		float cosx = Mathf.Abs (Mathf.Cos (_rigidbody.rotation.eulerAngles.x * Mathf.PI /180));
+		float sinz = Mathf.Abs (Mathf.Sin (_rigidbody.rotation.eulerAngles.z * Mathf.PI /180));
+		float cosz = Mathf.Abs (Mathf.Cos (_rigidbody.rotation.eulerAngles.z * Mathf.PI /180));
+		float cosy = Mathf.Abs (Mathf.Cos (_rigidbody.rotation.eulerAngles.y * Mathf.PI /180));
+		float siny = Mathf.Abs (Mathf.Sin (_rigidbody.rotation.eulerAngles.y * Mathf.PI /180));
+		float velocityForward = Mathf.Pow (Mathf.Pow (_rigidbody.velocity.x, 2) + Mathf.Pow (_rigidbody.velocity.z, 2), 0.5f);
 
-		float dragx = (1/2f) * Mathf.Pow(_rigidbody.velocity.x,2) * _constval.GetAirDensity () 
+		float dragForward = (1/2f) * Mathf.Pow(velocityForward,2) * _constval.GetAirDensity () 
+			* _constval.GetClin () * sinx * cosz * DroneWedth * DroneLength;
+
+		float dragUPward = (1/2f) * Mathf.Pow(_rigidbody.velocity.y,2) * _constval.GetAirDensity () 
+			* _constval.GetClin () * cosx * cosz * DroneWedth * DroneLength;
+		
+		float dragSwerve = (1/2f) * Mathf.Pow(velocityForward,2) * _constval.GetAirDensity () 
 				* _constval.GetClin () * sinz * cosy * DroneWedth * DroneLength;
 		
-		float dragy = (1/2f) * Mathf.Pow(_rigidbody.velocity.y,2) * _constval.GetAirDensity () 
-				* _constval.GetClin () * cosx * cosz * DroneWedth * DroneLength;
-		
-		float dragz = (1/2f) * Mathf.Pow(_rigidbody.velocity.z,2) * _constval.GetAirDensity () 
-				* _constval.GetClin () * sinx * cosz * DroneWedth * DroneLength;
-		
-		_rigidbody.drag = Mathf.Pow( (Mathf.Pow(dragx,2) + Mathf.Pow(dragy,2) + Mathf.Pow(dragz,2)),0.5f);
+		_rigidbody.drag = Mathf.Pow( (Mathf.Pow(dragForward,2) + Mathf.Pow(dragUPward,2) + Mathf.Pow(dragSwerve,2)),0.5f);
 //		print (_rigidbody.drag);
 	}
 
