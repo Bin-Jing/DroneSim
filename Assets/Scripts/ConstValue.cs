@@ -52,9 +52,9 @@ public class ConstValue : MonoBehaviour {
 		return propeller_diameter;
 	}
 	public float GetAngularVelocity(){
-		return max_rpm * 2 * Mathf.PI;
+		return max_rpm * 2 * Mathf.PI/60;
 	}
-	public float GetInertia(){
+	public float GetMomentInertia(){
 		return Drone.droneWeight * Mathf.Pow (propeller_diameter / 2f, 2);
 	}
 }
