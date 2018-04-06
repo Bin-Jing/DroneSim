@@ -84,13 +84,7 @@ public class DroneMove : MonoBehaviour {
 			}
 
 		}
-
-		if (Mathf.Abs (Input.GetAxis ("Vertical")) < 0.2f && Mathf.Abs (Input.GetAxis ("Horizontal")) > 0.2f) {
-//			upForce = 0;//13.5f;
-		}
 		if (Mathf.Abs(Input.GetAxis("FlyUp")) >= 0.3f) {
-			
-//			isFlying = true;
 			upForce = _constval.GetC_T () * _constval.GetAirDensity () * Mathf.Pow (_constval.GetAngularVelocity(), 2) 
 				* Mathf.Pow (_constval.GetPropellerDiameter (), 4) * Input.GetAxis ("FlyUp") ;
 
@@ -121,10 +115,10 @@ public class DroneMove : MonoBehaviour {
 		}
 	}
 	void Rotation(){
-		if (Input.GetKey (KeyCode.J)) {
+		if (Input.GetAxis ("Rotation") < 0) {
 			YRotation -= rotationAmount;
 		}
-		if (Input.GetKey (KeyCode.L)) {
+		if (Input.GetAxis ("Rotation") > 0) {
 			YRotation += rotationAmount;
 		}
 		currentYRotation = Mathf.SmoothDamp (currentYRotation, YRotation, ref rotationYVelocity, 0.25f);
