@@ -14,7 +14,7 @@ public class CameraFllow : MonoBehaviour {
 	void FixedUpdate(){
 		transform.position = Vector3.SmoothDamp (transform.position,
 			Drone.transform.TransformPoint (CameraPosition) ,
-			ref velocityCameraFllow, 0f);
+			ref velocityCameraFllow, 0.05f);
 
 		transform.rotation = Quaternion.Euler (new Vector3 (angle, Drone.GetComponent<DroneMove> ().currentYRotation, 0));
 	}
