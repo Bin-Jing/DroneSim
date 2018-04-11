@@ -35,6 +35,9 @@ public class DroneMove : MonoBehaviour {
 	float joinForces = 0;
 	float tiltAmount = 0;
 	public float curSpeed = 0;
+	public float curSpeedX = 0;
+	public float curSpeedY = 0;
+	public float curSpeedZ = 0;
 
 	//Rotation
 	float YRotation = 0f;
@@ -75,7 +78,9 @@ public class DroneMove : MonoBehaviour {
 		curSpeed = _rigidbody.velocity.magnitude;
 
 		_rigidbody.rotation = Quaternion.Euler (new Vector3(tiltAmountForward, currentYRotation, tiltAmountSwerve));
-		print (_rigidbody.velocity);
+		curSpeedX = _rigidbody.velocity.x;
+		curSpeedY = _rigidbody.velocity.y;
+		curSpeedZ = _rigidbody.velocity.z;
 	}
 	void PropellerForce(){
 		if ((Mathf.Abs (Input.GetAxis ("Vertical")) > 0.2f) || (Mathf.Abs (Input.GetAxis ("Horizontal")) > 0.2f)) {
