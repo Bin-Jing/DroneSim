@@ -81,18 +81,22 @@ public class DroneMove : MonoBehaviour {
 		curSpeedX = _rigidbody.velocity.x;
 		curSpeedY = _rigidbody.velocity.y;
 		curSpeedZ = _rigidbody.velocity.z;
+		print (_rigidbody.velocity);
 	}
 	void PropellerForce(){
+		
 		if ((Mathf.Abs (Input.GetAxis ("Vertical")) > 0.2f) || (Mathf.Abs (Input.GetAxis ("Horizontal")) > 0.2f)) {
 			
 			if (Input.GetAxis("FlyUp") == 0 && (Mathf.Abs (Input.GetAxis ("Vertical")) > 0.2f)) {
 				upForce = _constval.GetC_T () * _constval.GetAirDensity () * Mathf.Pow (_constval.GetAngularVelocity(), 2) 
-					* Mathf.Pow (_constval.GetPropellerDiameter (), 4) * Mathf.Abs (Mathf.Cos((90-_rigidbody.rotation.eulerAngles.x) * Mathf.PI /180));
+					* Mathf.Pow (_constval.GetPropellerDiameter (), 4) * Mathf.Abs(Input.GetAxis ("Vertical"));
+				curRMP = Mathf.Abs(_constval.GetMaxRMP () * Input.GetAxis ("Vertical"));
 				tiltAmount = 40;
 			}
 			if (Input.GetAxis("FlyUp") == 0 && (Mathf.Abs (Input.GetAxis ("Horizontal")) > 0.2f)) {
 				upForce = _constval.GetC_T () * _constval.GetAirDensity () * Mathf.Pow (_constval.GetAngularVelocity(), 2) 
-					* Mathf.Pow (_constval.GetPropellerDiameter (), 4) * Mathf.Abs (Mathf.Cos((90-_rigidbody.rotation.eulerAngles.z) * Mathf.PI /180));
+					* Mathf.Pow (_constval.GetPropellerDiameter (), 4) * Mathf.Abs(Input.GetAxis ("Horizontal"));
+				curRMP = Mathf.Abs(_constval.GetMaxRMP () * Input.GetAxis ("Horizontal"));
 				tiltAmount = 40;
 			}
 
@@ -108,14 +112,15 @@ public class DroneMove : MonoBehaviour {
 			} else {
 				tiltAmount = 0;
 			}
-
+			curRMP = Mathf.Abs(_constval.GetMaxRMP () * Input.GetAxis ("FlyUp"));
 
 		}  
 
 		if(Input.GetAxis("FlyUp") == 0 && Input.GetAxis ("Vertical") == 0 && Input.GetAxis ("Horizontal") == 0){
 			upForce = 0;
+			curRMP = 0;
 		}
-		curRMP = _constval.GetMaxRMP () * Input.GetAxis ("FlyUp");
+
 	}
 	void MovemenForward(){
 		if (Input.GetAxis ("Vertical") != 0) {
@@ -177,7 +182,7 @@ public class DroneMove : MonoBehaviour {
 			* _constval.GetClin () * cosx * cosz * DroneWedth * DroneLength;
 		
 		float dragSwerve = (1/2f) * Mathf.Pow(velocityForward,2) * _constval.GetAirDensity () 
-			* _constval.GetClin () * sinz * cosy * DroneWedth * DroneLength;
+			* _constval.GetClin () * sinz * DroneWedth * DroneLength;
 		
 		_rigidbody.drag = Mathf.Pow( (Mathf.Pow(dragForward,2) + Mathf.Pow(dragUPward,2) + Mathf.Pow(dragSwerve,2)),0.5f);
 //		print (_rigidbody.drag);
