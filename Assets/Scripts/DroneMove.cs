@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
+// 需改進：RMP應緩慢下降，放開搖桿後速度不應直接歸零
 public class DroneMove : MonoBehaviour {
 	ConstValue _constval;
 	Rigidbody _rigidbody;
 	bool isFlying = false;
-	public string CurCollision = "";
+	[HideInInspector]public string CurCollision = "";
 
 	Transform transform;
 	public Transform HeliceUpR;
@@ -81,8 +81,9 @@ public class DroneMove : MonoBehaviour {
 		curSpeedX = _rigidbody.velocity.x;
 		curSpeedY = _rigidbody.velocity.y;
 		curSpeedZ = _rigidbody.velocity.z;
-		print (_rigidbody.velocity);
+		//print (_rigidbody.velocity);
 	}
+
 	void PropellerForce(){
 		
 		if ((Mathf.Abs (Input.GetAxis ("Vertical")) > 0.2f) || (Mathf.Abs (Input.GetAxis ("Horizontal")) > 0.2f)) {
@@ -196,6 +197,7 @@ public class DroneMove : MonoBehaviour {
 		float TorNet = Tor + (_constval.GetPropellerDiameter()/2) * upForce - _rigidbody.angularDrag;
 		float AngularAcceleration = TorNet / _constval.GetMomentInertia ();
 //		print (AngularAcceleration);
+
 	}
 	void OnCollisionEnter (Collision col){
 		CurCollision = "Collision detected";

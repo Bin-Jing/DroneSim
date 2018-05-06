@@ -19,12 +19,12 @@ public class setRoute : MonoBehaviour {
 	GameObject player;
 	string path;
 	DroneMove DM;
-
 	// Use this for initialization
 	void Start () {
 		player = GameObject.FindGameObjectWithTag ("Player");
 		DM = player.GetComponent<DroneMove> ();
 
+		//MavLink.MavLinkSerializer.Deserialize_ALTITUDE ();
 
 //		else if(ENABLE){
 //			/* generate rings , balls */
@@ -53,6 +53,7 @@ public class setRoute : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+		GetBytesSingle (player.transform.position.x);
 		path = "Assets/routes/File" + Filecount + ".txt";
 		//Write some text to the test.txt file
 
@@ -67,11 +68,17 @@ public class setRoute : MonoBehaviour {
 				rec_gap = 1;
 				writer.WriteLine (player.transform.position.x + "," + player.transform.position.y + "," + player.transform.position.z
 					+ "," + player.transform.eulerAngles.x + "," + player.transform.eulerAngles.y+ "," + player.transform.eulerAngles.z
-					+ "," + DM.curSpeed + "," + DM.curSpeedX + "," + DM.curSpeedY + "," + DM.curSpeedZ);
+					+ "," + DM.curSpeed + "," + DM.curSpeedX + "," + DM.curSpeedY + "," + DM.curSpeedZ + "," + DM.curRMP);
 				print ("write file");
 			}
 			rec_gap--;
 		}
+	}
+	public static void GetBytesSingle( float argument )
+	{
+		byte[ ] byteArray = System.BitConverter.GetBytes( argument );
+		//print(byteArray[0].ToString("X2"));
+		//System.Console.WriteLine( formatter, argument,System.BitConverter.ToString( byteArray ) );
 	}
 	public void StartRecording(){
 		Recording = !Recording;
@@ -79,7 +86,8 @@ public class setRoute : MonoBehaviour {
 			Filecount += 1;
 			writer = new StreamWriter (path, false);
 			fileOpen = true;
-			writer.WriteLine ("PositionX,PositionY,PositionZ,RotationX,RotationY,RotataionZ,Speed,SpeedX,SpeedY,SpeedZ");
+			writer.WriteLine ("PositionX,PositionY,PositionZ,RotationX,RotationY,RotataionZ,Speed,SpeedX,SpeedY,SpeedZ,RMP");
+
 		} else {
 			fileOpen = false;
 			writer.Close ();
