@@ -5,88 +5,83 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using System.IO;
+using MavLink;
 
 public class UdpClient:MonoBehaviour
 {
-	const int buf_len = 2041;
-	MavLink.Msg_local_position_ned mlpn;
-	MavLink.Msg_heartbeat Mheratbeat;
+	const int buf_len = 17;
+	Msg_local_position_ned mlpn;
+	Msg_heartbeat Mheratbeat;
+	Msg_sys_status Msts;
+	Msg_attitude Matt;
+	Msg_request_data_stream Mdatastream;
+	Mavlink Mv = new Mavlink();
+
 	GameObject player;
 	DroneMove DM;
-	int offset = 0;
-	byte[] b = new byte[buf_len];
+
 	float time = 0;
+	[HideInInspector]public string ConnectString = "false";
+	int seq = 0;
+	int SystemId;
+	Socket socket; 
+	EndPoint serverEnd; 
+	IPEndPoint ipEnd; 
+	IPEndPoint ipLoc;
+	string recvStr; 
+	string sendStr; 
+	byte[] recvData=new byte[buf_len];
+	byte[] sendData=new byte[buf_len]; 
+	int recvLen; 
+	Thread connectThread; 
 
-	Socket socket; //目标socket
-	EndPoint serverEnd; //服务端
-	IPEndPoint ipEnd; //服务端端口
-	string recvStr; //接收的字符串
-	string sendStr; //发送的字符串
-	byte[] recvData=new byte[1024]; //接收的数据，必须为字节
-	byte[] sendData=new byte[1024]; //发送的数据，必须为字节
-	int recvLen; //接收的数据长度
-	Thread connectThread; //连接线程
 
-	//初始化
 	void InitSocket()
 	{
-		
-		//定义连接的服务器ip和端口，可以是本机ip，局域网，互联网
-		ipEnd=new IPEndPoint(IPAddress.Parse("127.0.0.1"),14550); 
-		//定义套接字类型,在主线程中定义
+
+
+		ipEnd=new IPEndPoint(IPAddress.Parse("127.0.0.1"),14550);
+		//ipLoc = new IPEndPoint(IPAddress.Parse("127.0.0.1"),14551);
+
 		socket=new Socket(AddressFamily.InterNetwork,SocketType.Dgram,ProtocolType.Udp);
-		//定义服务端
 		IPEndPoint sender=new IPEndPoint(IPAddress.Any,0);
 		serverEnd=(EndPoint)sender;
+
 		print("waiting for sending UDP dgram");
-
-		//建立初始连接，这句非常重要，第一次连接初始化了serverEnd后面才能收到消息
-		SocketSend();
-
-		//开启一个线程连接，必须的，否则主线程卡死
+		//socket.Bind (ipLoc);
+		//SocketSend();
 		connectThread=new Thread(new ThreadStart(SocketReceive));
 		connectThread.Start();
 	}
+		
 
-	void SocketSend()
-	{
-		//清空发送缓存
-		//sendData=new byte[1024];
-		//数据类型转换
-		//sendData=Encoding.ASCII.GetBytes(sendStr);
-		//发送给指定服务端
-		socket.SendTo(b,b.Length,SocketFlags.None,ipEnd);
 
-	}
-
-	//服务器接收
 	void SocketReceive()
 	{
-		//进入接收循环
+
 		while(true)
 		{
-			//对data清零
+
 			recvData=new byte[buf_len];
-			//获取客户端，获取服务端端数据，用引用给服务端赋值，实际上服务端已经定义好并不需要赋值
 			recvLen=socket.ReceiveFrom(recvData,ref serverEnd);
 			print("message from: "+serverEnd.ToString()); //打印服务端信息
-			//输出接收到的数据
+
 			recvStr=Encoding.ASCII.GetString(recvData,0,recvLen);
 			print (recvStr);
 
 		}
 	}
 
-	//连接关闭
+
 	void SocketQuit()
 	{
-		//关闭线程
+
 		if(connectThread!=null)
 		{
 			connectThread.Interrupt();
 			connectThread.Abort();
 		}
-		//最后关闭socket
 		if(socket!=null)
 			socket.Close();
 	}
@@ -95,11 +90,15 @@ public class UdpClient:MonoBehaviour
 	void Start()
 	{
 		Application.runInBackground = true;
-		mlpn = new MavLink.Msg_local_position_ned ();
-		Mheratbeat = new MavLink.Msg_heartbeat ();
+		mlpn = new Msg_local_position_ned ();
+		Mheratbeat = new Msg_heartbeat ();
+		Msts = new Msg_sys_status ();
+		Matt = new Msg_attitude ();
+		Mdatastream = new Msg_request_data_stream();
+
 		player = GameObject.FindGameObjectWithTag ("Player");
 		DM = player.GetComponent<DroneMove> ();
-		InitSocket(); //在这里初始化
+		InitSocket(); 
 
 
 	}
@@ -107,15 +106,66 @@ public class UdpClient:MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
+		if (socket.Connected) {
+			ConnectString = serverEnd.ToString();
+		}else{
+			ConnectString = "false";
+		}
+		if (seq >= 255) {
+			seq = 0;
+		} else {
+			seq += 1;
+		}
 		time += Time.deltaTime;
-		Mheratbeat.autopilot = (byte)MavLink.MAV_AUTOPILOT.MAV_AUTOPILOT_GENERIC;
-		Mheratbeat.type = (byte)MavLink.MAV_TYPE.MAV_TYPE_QUADROTOR;
-		Mheratbeat.base_mode = (byte)MavLink.MAV_MODE.MAV_MODE_GUIDED_ARMED;
-		Mheratbeat.custom_mode = 0;
-		Mheratbeat.system_status = (byte)MavLink.MAV_STATE.MAV_STATE_ACTIVE;
-		Mheratbeat.Serialize (b,ref offset);
-		SocketSend ();
+		//heartbeat
+		HeartBeat();
 
+//		//status
+		StatusUpdate();
+//
+//		//position
+		PositionUpdate();
+//
+//
+//		//attitude
+		AttitudeUpdate();
+
+	}
+	void RequestDataStream(){
+		Mdatastream.req_message_rate = 2;
+		Mdatastream.req_stream_id = (byte)MAV_DATA_STREAM.MAV_DATA_STREAM_ALL;
+		Mdatastream.start_stop = 1;
+		Mdatastream.target_component = (byte)MAV_COMPONENT.MAV_COMP_ID_ALL;
+		Mdatastream.target_system = (byte)SystemId;
+	}
+	void HeartBeat(){
+		Mheratbeat.mavlink_version = (byte)(3.0);
+		Mheratbeat.autopilot = (byte)MAV_AUTOPILOT.MAV_AUTOPILOT_GENERIC;
+		Mheratbeat.type = (byte)MAV_TYPE.MAV_TYPE_QUADROTOR;
+		Mheratbeat.base_mode = (byte)MAV_MODE.MAV_MODE_GUIDED_ARMED;
+		Mheratbeat.custom_mode = 0;
+		Mheratbeat.system_status = (byte)MAV_STATE.MAV_STATE_ACTIVE;
+
+		SendPacket (Mheratbeat);
+	}
+	void StatusUpdate(){
+		Msts.battery_remaining = 100;
+		Msts.current_battery = -1;
+		Msts.drop_rate_comm = 0;
+		Msts.errors_comm = 0;
+		Msts.errors_count1 = 0;
+		Msts.errors_count2 = 0;
+		Msts.errors_count3 = 0;
+		Msts.errors_count4 = 0;
+		Msts.load = 50;
+		Msts.onboard_control_sensors_enabled = 1;
+		Msts.onboard_control_sensors_health = 0;
+		Msts.onboard_control_sensors_present = 1;
+		Msts.voltage_battery = 11000;
+
+		SendPacket (Msts);
+	}
+	void PositionUpdate(){
 		mlpn.x = player.transform.position.x;
 		mlpn.y = player.transform.position.y;
 		mlpn.z = player.transform.position.z;
@@ -123,16 +173,35 @@ public class UdpClient:MonoBehaviour
 		mlpn.vy = DM.curSpeedY; 
 		mlpn.vz = DM.curSpeedZ;
 		mlpn.time_boot_ms = (uint)(time*1000);
-		mlpn.Serialize (b, ref offset);
-		SocketSend ();
 
-		System.Array.Clear(b,0,buf_len);  
-		offset = 0;
+		SendPacket (mlpn);		
+	}
+	void AttitudeUpdate(){
+		Matt.time_boot_ms = (uint)(time*1000);
+		Matt.pitch = player.transform.eulerAngles.x;
+		Matt.yaw = player.transform.eulerAngles.y;
+		Matt.roll = player.transform.eulerAngles.z;
+		Matt.pitchspeed = 20;
+		Matt.yawspeed = 20;
+		Matt.rollspeed = 20;
+
+		SendPacket (Matt);
 	}
 
 	void OnApplicationQuit()
 	{
 		SocketQuit();
 	}
+	private void SendPacket(MavlinkMessage m){
+		MavlinkPacket p = new MavlinkPacket();
+		p.Message = m;
+		p.SequenceNumber = (byte)seq;
+		p.SystemId = 255;
+		p.ComponentId = (byte)MAV_COMPONENT.MAV_COMP_ID_MISSIONPLANNER;
+		byte[] by = Mv.Send(p);
+		//Serial.Write(by, 0, by.Length);
+		socket.SendTo(by,by.Length,SocketFlags.None,ipEnd);
+	}
+
 }
 
