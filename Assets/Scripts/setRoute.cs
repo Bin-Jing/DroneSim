@@ -68,7 +68,7 @@ public class setRoute : MonoBehaviour {
 				rec_gap = 1;
 				writer.WriteLine (player.transform.position.x + "," + player.transform.position.y + "," + player.transform.position.z
 					+ "," + player.transform.eulerAngles.x + "," + player.transform.eulerAngles.y+ "," + player.transform.eulerAngles.z
-					+ "," + DM.curSpeed + "," + DM.curSpeedX + "," + DM.curSpeedY + "," + DM.curSpeedZ + "," + DM.curRMP);
+					+ "," + DM.curSpeed + "," + DM.curSpeedX + "," + DM.curSpeedY + "," + DM.curSpeedZ + "," + DM.curRPM);
 				print ("write file");
 			}
 			rec_gap--;
@@ -86,7 +86,7 @@ public class setRoute : MonoBehaviour {
 			Filecount += 1;
 			writer = new StreamWriter (path, false);
 			fileOpen = true;
-			writer.WriteLine ("PositionX,PositionY,PositionZ,RotationX,RotationY,RotataionZ,Speed,SpeedX,SpeedY,SpeedZ,RMP");
+			writer.WriteLine ("PositionX,PositionY,PositionZ,RotationX,RotationY,RotataionZ,Speed,SpeedX,SpeedY,SpeedZ,RPM");
 
 		} else {
 			fileOpen = false;

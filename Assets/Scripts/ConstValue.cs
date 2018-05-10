@@ -46,7 +46,7 @@ public class ConstValue : MonoBehaviour {
 	public float GetAirDensity(){
 		return air_density;
 	}
-	public float GetMaxRMP(){
+	public float GetMaxRPM(){
 		return max_rpm;
 	}
 	public float GetPropellerDiameter(){

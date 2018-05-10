@@ -18,7 +18,7 @@ public class InfoUI : MonoBehaviour {
 		
 	void Update () {
 		SpeedText.text = "Speed : " + DM.curSpeed;
-		RMPText.text = "RMP : " + DM.curRMP;
+		RMPText.text = "RPM : " + DM.curRPM;
 		ConnectText.text = "Connect : " + udp.ConnectString;
 		CollisionText.text = DM.CurCollision;
 	}
