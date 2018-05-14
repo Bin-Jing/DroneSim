@@ -5,8 +5,8 @@ using UnityEngine;
 public class LatLonAlt : MonoBehaviour {
 	ConstValue _constval;
 	GameObject player;
-	public float lat = 0;
-	public float lon = 0;
+	public float lat = 24.979212f;
+	public float lon = 121.575308f;
 	public float alt = 100;
 
 	public float Startlat;
@@ -15,8 +15,9 @@ public class LatLonAlt : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		_constval = GetComponent<ConstValue> ();
 		player = GameObject.FindGameObjectWithTag ("Player");
+		_constval = player.GetComponent<ConstValue> ();
+
 		Startlat = lat;
 		Startlon = lon;
 		Startalt = alt;

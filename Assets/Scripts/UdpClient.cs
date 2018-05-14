@@ -237,9 +237,9 @@ public class UdpClient:MonoBehaviour
 	void GPSUpdate(){
 		Mgpsr.alt = (int)(latlonalt.alt*1000);
 		Mgpsr.cog = UInt16_Max;//??????
-		Mgpsr.eph = 1;//?????
-		Mgpsr.epv = 1;//???????
-		Mgpsr.fix_type = (byte)GPS_FIX_TYPE.GPS_FIX_TYPE_NO_FIX;//???????
+		Mgpsr.eph = UInt16_Max;//?????
+		Mgpsr.epv = UInt16_Max;//???????
+		Mgpsr.fix_type = (byte)GPS_FIX_TYPE.GPS_FIX_TYPE_3D_FIX;//???????
 		Mgpsr.lat = (int)(latlonalt.lat*10000000);
 		Mgpsr.lon = (int)(latlonalt.lon*10000000);
 		Mgpsr.satellites_visible = 255;//???????
@@ -254,10 +254,11 @@ public class UdpClient:MonoBehaviour
 		Mattq.rollspeed = RollS;
 		Mattq.yawspeed = YawS;
 
+		//unity rotation didnt match mav rotation
 		Mattq.q1 = player.transform.rotation.w;
-		Mattq.q2 = player.transform.rotation.x;
-		Mattq.q3 = player.transform.rotation.y;
-		Mattq.q4 = player.transform.rotation.z;
+		Mattq.q2 = player.transform.rotation.z;
+		Mattq.q3 = -player.transform.rotation.x;
+		Mattq.q4 = player.transform.rotation.y;
 		Mattq.time_boot_ms = (uint)time;
 
 		SendPacket (Mattq);
@@ -277,11 +278,12 @@ public class UdpClient:MonoBehaviour
 	void UpdateAttitudeTarget(){
 		MattTar.time_boot_ms = (uint)time;
 
+		//unity rotation didnt match mav rotation
 		float[] qA = new float [4];
 		qA[0] = player.transform.rotation.w;
-		qA[1] = player.transform.rotation.x;
-		qA[2] = player.transform.rotation.y;
-		qA[3] = player.transform.rotation.z;
+		qA[1] = player.transform.rotation.z;
+		qA[2] = -player.transform.rotation.x;
+		qA[3] = player.transform.rotation.y;
 
 		MattTar.body_pitch_rate = PitchS;
 		MattTar.body_roll_rate = RollS;
