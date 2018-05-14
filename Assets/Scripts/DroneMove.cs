@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// 
+// rotation Y RPM
 public class DroneMove : MonoBehaviour {
 	ConstValue _constval;
 	Rigidbody _rigidbody;
@@ -29,8 +29,8 @@ public class DroneMove : MonoBehaviour {
 	//RotationXZ
 	float tiltAmountForward = 0f;
 	float tiltAmountSwerve = 0f;
-	float tiltVelocityForward = 0f;
-	float tiltVelocitySwerve = 0f;
+	public float tiltVelocityForward = 0f;
+	public float tiltVelocitySwerve = 0f;
 	float tiltAmount = 0;//control the max rotation
 
 	//Speed
@@ -44,7 +44,7 @@ public class DroneMove : MonoBehaviour {
 	float YRotation = 0f;
 	[HideInInspector]public float currentYRotation = 0f;
 	float rotationAmount = 0f;
-	float rotationYVelocity = 0f;
+	public float rotationYVelocity = 0f;
 
 	// Use this for initialization
 	void Awake () {
@@ -122,7 +122,7 @@ public class DroneMove : MonoBehaviour {
 		if(Input.GetAxis("FlyUp") == 0 && Input.GetAxis ("Vertical") == 0 && Input.GetAxis ("Horizontal") == 0){
 			
 			upForce = Mathf.SmoothDamp (upForce, 0, ref refForce, 1f);
-			curRPM = Mathf.SmoothDamp (curRPM, 0, ref refRPM, 1f);
+			curRPM = Mathf.SmoothDamp (curRPM, 0, ref refRPM, 1/Mathf.Pow(2,0.5f));
 		}
 
 	}
@@ -159,9 +159,13 @@ public class DroneMove : MonoBehaviour {
 	void Rotation(){
 
 		if (Input.GetAxis ("Rotation") != 0) {
-			if (upForce == 0) {
+			if (upForce <= 40) {
 				upForce = _constval.GetC_T () * _constval.GetAirDensity () * Mathf.Pow (_constval.GetAngularVelocity (), 2)
-				* Mathf.Pow (_constval.GetPropellerDiameter (), 4) * 0.42f;
+					* Mathf.Pow (_constval.GetPropellerDiameter (), 4) * HoverControlInput();
+				
+				curRPM = Mathf.SmoothDamp (curRPM, _constval.GetMaxRPM () * Mathf.Abs(Input.GetAxis ("Rotation")), ref refRPM, 1/Mathf.Pow(2,0.5f));
+					 
+					
 			}
 			rotationAmount = AngularAcceleration * Time.deltaTime;
 			YRotation += rotationAmount * Input.GetAxis ("Rotation") ;
@@ -210,6 +214,9 @@ public class DroneMove : MonoBehaviour {
 		AngularAcceleration = TorNet / _constval.GetMomentInertia ();
 //		print (AngularAcceleration);
 
+	}
+	float HoverControlInput(){
+		return 0.42f;
 	}
 	void OnCollisionEnter (Collision col){
 		CurCollision = "Collision detected";

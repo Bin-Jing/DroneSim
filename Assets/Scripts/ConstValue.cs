@@ -12,10 +12,10 @@ public class ConstValue : MonoBehaviour {
 	const float restitution = 0.15f;
 	const float air_density = 1.225f;//  kg/m^3
 
-	public float power_coefficient = 0.040164f; // the torque co-efficient at @ 6396.667 RPM
-	public float thrust_coefficient =  0.109919f; // the thrust co-efficient @ 6396.667 RPM
-	public float max_rpm = 6396.667f;
-	public float propeller_diameter = 0.2f;
+	public const float power_coefficient = 0.040164f; // the torque co-efficient at @ 6396.667 RPM
+	public const float thrust_coefficient =  0.109919f; // the thrust co-efficient @ 6396.667 RPM
+	public const float max_rpm = 6396.667f;
+	public const float propeller_diameter = 0.2f;
 
 	void Start(){
 		player = GameObject.FindGameObjectWithTag ("Player");
