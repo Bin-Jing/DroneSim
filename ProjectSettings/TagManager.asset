@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Ground
   - System
+  - apron
   layers:
   - Default
   - TransparentFX

@@ -25,7 +25,8 @@ public class DroneMove : MonoBehaviour {
 	public float upForce = 0f;
 	float refForce = 0f;
 	float _gravity = 9.81f;
-
+	public float Lineardrag = 0f;
+	public float AngularDrag = 0f;
 	//RotationXZ
 	float tiltAmountForward = 0f;
 	float tiltAmountSwerve = 0f;
@@ -198,6 +199,7 @@ public class DroneMove : MonoBehaviour {
 			* _constval.GetClin () * sinz * DroneWedth * DroneLength;
 		
 		_rigidbody.drag = Mathf.Pow( (Mathf.Pow(dragForward,2) + Mathf.Pow(dragUPward,2) + Mathf.Pow(dragSwerve,2)),0.5f);
+		Lineardrag = _rigidbody.drag;
 //		print (_rigidbody.drag);
 	}
 
@@ -208,6 +210,7 @@ public class DroneMove : MonoBehaviour {
 			* Mathf.Pow (tiltVelocityForward, 2) * Mathf.Pow (((DroneWedth / 2f) + (DroneLength / 2f)) / 2f, 5)+
 			(Mathf.PI * _constval.GetC_AngularDrag () / 5f) * _constval.GetAirDensity ()
 			* Mathf.Pow (tiltVelocitySwerve, 2) * Mathf.Pow (((DroneWedth / 2f) + (DroneLength / 2f)) / 2f, 5);
+		AngularDrag = _rigidbody.angularDrag;
 	}
 	void updateAngularAcceleration(){
 		float TorNet = Tor + (_constval.GetPropellerDiameter()/2) * upForce - _rigidbody.angularDrag;
