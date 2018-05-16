@@ -30,8 +30,8 @@ public class DroneMove : MonoBehaviour {
 	//RotationXZ
 	float tiltAmountForward = 0f;
 	float tiltAmountSwerve = 0f;
-	public float tiltVelocityForward = 0f;
-	public float tiltVelocitySwerve = 0f;
+	[HideInInspector]public float tiltVelocityForward = 0f;
+	[HideInInspector]public float tiltVelocitySwerve = 0f;
 	float tiltAmount = 0;//control the max rotation
 
 	//Speed
@@ -42,13 +42,14 @@ public class DroneMove : MonoBehaviour {
 	float AngularAcceleration;
 
 	//RotationY
-	float YRotation = 0f;
-	[HideInInspector]public float currentYRotation = 0f;
-	float rotationAmount = 0f;
-	public float rotationYVelocity = 0f;
+	[HideInInspector]float YRotation = 180f;
+	[HideInInspector]public float currentYRotation;
+	[HideInInspector]float rotationAmount = 0f;
+	[HideInInspector]public float rotationYVelocity = 0f;
 
 	// Use this for initialization
 	void Awake () {
+		currentYRotation = 180f;
 		_constval = GetComponent<ConstValue> ();
 		_rigidbody = GetComponent<Rigidbody>();
 		transform = GetComponent<Transform> ();

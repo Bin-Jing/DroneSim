@@ -5,7 +5,7 @@ using UnityEngine;
 public class ConstValue : MonoBehaviour {
 	GameObject player;
 	DroneMove Drone;
-	const float EarthRadius = 6378100;
+	const float EarthRadius = 6378137;
 	const float g0 = 9.81f;
 	const float linear_drag_coefficient = 1.3f / 4.0f;
 	const float angular_drag_coefficient = linear_drag_coefficient;

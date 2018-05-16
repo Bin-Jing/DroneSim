@@ -119,7 +119,7 @@ public class UdpClient:MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-		print (latlonalt.lon+ " "+latlonalt.lat);
+		
 		PitchS = DM.tiltVelocityForward;
 		YawS = DM.rotationYVelocity;
 		RollS = DM.tiltVelocitySwerve;
@@ -269,7 +269,7 @@ public class UdpClient:MonoBehaviour
 	void UpdateHud(){
 		Mvhud.airspeed = DM.curSpeed;
 		Mvhud.groundspeed = DM.curSpeed;
-		Mvhud.alt = latlonalt.alt;
+		Mvhud.alt = (float)latlonalt.alt;
 		Mvhud.climb = DM.curSpeedY;
 		Mvhud.heading = (short)player.transform.eulerAngles.y;
 		Mvhud.throttle = 0;//?????
@@ -443,7 +443,7 @@ public class UdpClient:MonoBehaviour
 		setPositionG.coordinate_frame = (byte)MAV_FRAME.MAV_FRAME_GLOBAL_TERRAIN_ALT_INT;
 		setPositionG.lat_int = (int)(latlonalt.lat*10000000);
 		setPositionG.lon_int = (int)(latlonalt.lon*10000000);
-		setPositionG.alt = latlonalt.alt;
+		setPositionG.alt = (float)latlonalt.alt;
 		setPositionG.target_component = ComponentId;
 		setPositionG.target_system = SystemId;
 		setPositionG.type_mask = 0;
@@ -467,7 +467,7 @@ public class UdpClient:MonoBehaviour
 		PositionG.coordinate_frame = (byte)MAV_FRAME.MAV_FRAME_GLOBAL_TERRAIN_ALT_INT;
 		PositionG.lat_int = (int)(latlonalt.lat*10000000);
 		PositionG.lon_int = (int)(latlonalt.lon*10000000);
-		PositionG.alt = latlonalt.alt;
+		PositionG.alt = (float)latlonalt.alt;
 		PositionG.type_mask = 0;
 		PositionG.vx = DM.curSpeedX;
 		PositionG.vy = DM.curSpeedY;
@@ -480,7 +480,7 @@ public class UdpClient:MonoBehaviour
 
 	void UpdateAltitude(){
 		Malt.time_usec = (uint)time;
-		Malt.altitude_amsl = latlonalt.alt;//??????
+		Malt.altitude_amsl = (float)latlonalt.alt;//??????
 		Malt.altitude_local = player.transform.position.y;//????????
 		Malt.altitude_monotonic = 0;
 		Malt.altitude_relative = player.transform.position.y;
@@ -570,7 +570,7 @@ public class UdpClient:MonoBehaviour
 			recvLen=socket.ReceiveFrom(recvData,ref serverEnd);
 
 			Mv.ParseBytes (recvData);
-			print (System.BitConverter.ToString(recvData));
+			//print (System.BitConverter.ToString(recvData));
 
 		}
 	}
