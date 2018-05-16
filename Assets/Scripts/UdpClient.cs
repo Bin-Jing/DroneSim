@@ -74,6 +74,7 @@ public class UdpClient:MonoBehaviour
 	// Use this for initialization
 	void Start()
 	{
+		
 		SystemId = (byte)MAV_MODE.MAV_MODE_MANUAL_ARMED;
 		ComponentId = (byte)MAV_COMPONENT.MAV_COMP_ID_AUTOPILOT1;
 		Application.runInBackground = true;
@@ -94,7 +95,7 @@ public class UdpClient:MonoBehaviour
 		Mvirbration = new Msg_vibration ();
 		ExtendState = new Msg_extended_sys_state ();
 
-		latlonalt = new LatLonAlt ();
+
 		Malt = new Msg_altitude ();
 		positionL = new Msg_position_target_local_ned ();
 		setPositionL = new Msg_set_position_target_local_ned ();
@@ -104,7 +105,7 @@ public class UdpClient:MonoBehaviour
 		MhiIMU = new Msg_highres_imu ();
 		BatteryStatus = new Msg_battery_status ();
 
-
+		latlonalt = GameObject.FindGameObjectWithTag ("System").GetComponent<LatLonAlt> ();
 		player = GameObject.FindGameObjectWithTag ("Player");
 		DM = player.GetComponent<DroneMove> ();
 		InitSocket(); 
@@ -118,6 +119,7 @@ public class UdpClient:MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
+		print (latlonalt.lon+ " "+latlonalt.lat);
 		PitchS = DM.tiltVelocityForward;
 		YawS = DM.rotationYVelocity;
 		RollS = DM.tiltVelocitySwerve;
@@ -149,7 +151,7 @@ public class UdpClient:MonoBehaviour
 		UpdateAltitude();//#141  ALTITUDE
 		UpdateBatteryStatus();//#147
 		UpdataEstimatorStatus();//#230 ESTIMATOR_STATUS
-		UpdateVirbration();//#241 VIBRATION
+		//UpdateVirbration();//#241 VIBRATION
 		HomePosition ();//#242
 		UpdateExtendState();//#245 Extend
 
@@ -438,8 +440,8 @@ public class UdpClient:MonoBehaviour
 		setPositionG.afx = 0;
 		setPositionG.afy = 0;
 		setPositionG.afz = 0;
-		setPositionG.coordinate_frame = (byte)MAV_FRAME.MAV_FRAME_GLOBAL_INT;
-		setPositionG.lat_int = (int)(latlonalt.lat*1000);
+		setPositionG.coordinate_frame = (byte)MAV_FRAME.MAV_FRAME_GLOBAL_TERRAIN_ALT_INT;
+		setPositionG.lat_int = (int)(latlonalt.lat*10000000);
 		setPositionG.lon_int = (int)(latlonalt.lon*10000000);
 		setPositionG.alt = latlonalt.alt;
 		setPositionG.target_component = ComponentId;
@@ -462,8 +464,8 @@ public class UdpClient:MonoBehaviour
 		PositionG.afx = 0;//???????
 		PositionG.afy = 0;//???????
 		PositionG.afz = 0;//???????
-		PositionG.coordinate_frame = (byte)MAV_FRAME.MAV_FRAME_GLOBAL_INT;
-		PositionG.lat_int = (int)(latlonalt.lat*1000);
+		PositionG.coordinate_frame = (byte)MAV_FRAME.MAV_FRAME_GLOBAL_TERRAIN_ALT_INT;
+		PositionG.lat_int = (int)(latlonalt.lat*10000000);
 		PositionG.lon_int = (int)(latlonalt.lon*10000000);
 		PositionG.alt = latlonalt.alt;
 		PositionG.type_mask = 0;

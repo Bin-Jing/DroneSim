@@ -5,9 +5,10 @@ using UnityEngine;
 public class LatLonAlt : MonoBehaviour {
 	ConstValue _constval;
 	GameObject player;
-	public float lat = 24.979212f;
-	public float lon = 121.575308f;
-	public float alt = 100;
+
+	public float lat;
+	public float lon;
+	public float alt;
 
 	public float Startlat;
 	public float Startlon;
@@ -18,6 +19,9 @@ public class LatLonAlt : MonoBehaviour {
 		player = GameObject.FindGameObjectWithTag ("Player");
 		_constval = player.GetComponent<ConstValue> ();
 
+		lat = 24.986264f;
+		lon = 121.571793f;
+		alt = 100;
 		Startlat = lat;
 		Startlon = lon;
 		Startalt = alt;
@@ -25,8 +29,8 @@ public class LatLonAlt : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		lat += player.transform.position.x / _constval.GetEarthRadius() * 180.0f / Mathf.PI;
-		lon += player.transform.position.z / (Mathf.Cos(lat * Mathf.PI / 180.0f) * _constval.GetEarthRadius()) * 180.0f / Mathf.PI;
-		alt -= player.transform.position.y;
+		lon = Startlon+player.transform.position.x / (Mathf.Cos(lat * Mathf.PI / 180.0f) * _constval.GetEarthRadius()) * 180.0f / Mathf.PI;
+		lat = Startlat+player.transform.position.z / _constval.GetEarthRadius() * 180.0f / Mathf.PI;
+		alt = Startalt-player.transform.position.y;
 	}
 }
