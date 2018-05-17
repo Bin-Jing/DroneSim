@@ -33,8 +33,8 @@ public class LatLonAlt : MonoBehaviour {
 	void Update () {
 
 
-		lon = Startlon+player.transform.position.x / (Math.Cos(lat * Math.PI / 180.0f) * _constval.GetEarthRadius()) * 180.0f / Math.PI;
-		lat = Startlat+player.transform.position.z / _constval.GetEarthRadius() * 180.0f / Math.PI;
+		lon = Startlon+player.transform.position.x / (Math.Cos(lat * Math.PI / 180.0f) * EARTH_RADIUS) * 180.0f / Math.PI;
+		lat = Startlat+player.transform.position.z / EARTH_RADIUS * 180.0f / Math.PI;
 		alt = Startalt-player.transform.position.y;
 		print (lon.ToString("n6")+ " "+lat.ToString("n6"));
 	}

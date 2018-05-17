@@ -65,7 +65,6 @@ public class UdpClient:MonoBehaviour
 	string sendStr; 
 	byte[] recvData=new byte[40];
 	byte[] sendData=new byte[40]; 
-	int recvLen; 
 	Thread connectThread; 
 
 
@@ -567,7 +566,7 @@ public class UdpClient:MonoBehaviour
 		{
 
 			recvData=new byte[40];
-			recvLen=socket.ReceiveFrom(recvData,ref serverEnd);
+			//int recvLen=socket.ReceiveFrom(recvData,ref serverEnd);
 
 			Mv.ParseBytes (recvData);
 			//print (System.BitConverter.ToString(recvData));

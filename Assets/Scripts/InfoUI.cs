@@ -23,8 +23,8 @@ public class InfoUI : MonoBehaviour {
 		SpeedText.text = "Speed : " + DM.curSpeed.ToString("n2") + " m/s";
 		RMPText.text = "RPM : " + DM.curRPM;
 		ConnectText.text = "Connect : " + udp.ConnectString;
-		LinDragText.text = "Linear Drag : " + DM.Lineardrag;
-		AngDragText.text = "Angular Drag : " + DM.AngularDrag;
+		LinDragText.text = "Drag : " + DM.Lineardrag.ToString("n4");
+		AngDragText.text = "Angular Drag : " + DM.AngularDrag.ToString("n4");
 		CollisionText.text = DM.CurCollision;
 	}
 	public void RestartBtn(){

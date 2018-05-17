@@ -147,7 +147,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -13.099976, y: -174.9}
+  m_AnchoredPosition: {x: -74, y: -8}
   m_SizeDelta: {x: 80, y: 30}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &175221083
@@ -169,10 +169,10 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 1, g: 0, b: 0, a: 1}
-    m_HighlightedColor: {r: 1, g: 0, b: 0, a: 1}
+    m_NormalColor: {r: 1, g: 0.48145545, b: 0.48145545, a: 1}
+    m_HighlightedColor: {r: 0.99264705, g: 0.45982918, b: 0.45982918, a: 1}
     m_PressedColor: {r: 1, g: 1, b: 1, a: 1}
-    m_DisabledColor: {r: 0.9852941, g: 0, b: 0, a: 0.5019608}
+    m_DisabledColor: {r: 1, g: 0.49243078, b: 0.49243078, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -943,6 +943,19 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 376085697}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &533974893 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1833156944988412, guid: 88ba10147223e43ada38723b37802323,
+    type: 2}
+  m_PrefabInternal: {fileID: 932265050}
+--- !u!45 &533974899
+Skybox:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 533974893}
+  m_Enabled: 1
+  m_CustomSkybox: {fileID: 2100000, guid: 4e154bf235e41704bbd6bbc6fd6c63f6, type: 2}
 --- !u!1 &544182516
 GameObject:
   m_ObjectHideFlags: 0
@@ -1524,6 +1537,16 @@ Prefab:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 20881550886154528, guid: 88ba10147223e43ada38723b37802323,
+        type: 2}
+      propertyPath: m_ClearFlags
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 20899824843805098, guid: 88ba10147223e43ada38723b37802323,
+        type: 2}
+      propertyPath: m_ClearFlags
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 88ba10147223e43ada38723b37802323, type: 2}
   m_IsPrefabParent: 0
@@ -1989,6 +2012,19 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1401132870}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1504055380 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1835539550328546, guid: 88ba10147223e43ada38723b37802323,
+    type: 2}
+  m_PrefabInternal: {fileID: 932265050}
+--- !u!45 &1504055386
+Skybox:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1504055380}
+  m_Enabled: 1
+  m_CustomSkybox: {fileID: 2100000, guid: 4e154bf235e41704bbd6bbc6fd6c63f6, type: 2}
 --- !u!1001 &1534354620
 Prefab:
   m_ObjectHideFlags: 0
@@ -2360,6 +2396,19 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1956706141}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1988496521 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1189555326276108, guid: 88ba10147223e43ada38723b37802323,
+    type: 2}
+  m_PrefabInternal: {fileID: 932265050}
+--- !u!45 &1988496527
+Skybox:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1988496521}
+  m_Enabled: 1
+  m_CustomSkybox: {fileID: 2100000, guid: 4e154bf235e41704bbd6bbc6fd6c63f6, type: 2}
 --- !u!1 &2047361609
 GameObject:
   m_ObjectHideFlags: 0
@@ -2472,7 +2521,7 @@ GameObject:
   - component: {fileID: 2139648070}
   - component: {fileID: 2139648071}
   m_Layer: 0
-  m_Name: Recorder
+  m_Name: System
   m_TagString: System
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
