@@ -36,6 +36,6 @@ public class LatLonAlt : MonoBehaviour {
 		lon = Startlon+player.transform.position.x / (Math.Cos(lat * Math.PI / 180.0f) * EARTH_RADIUS) * 180.0f / Math.PI;
 		lat = Startlat+player.transform.position.z / EARTH_RADIUS * 180.0f / Math.PI;
 		alt = Startalt-player.transform.position.y;
-		print (lon.ToString("n6")+ " "+lat.ToString("n6"));
+		//print (lon.ToString("n6")+ " "+lat.ToString("n6"));
 	}
 }

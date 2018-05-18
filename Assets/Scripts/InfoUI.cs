@@ -11,10 +11,12 @@ public class InfoUI : MonoBehaviour {
 	public Text ConnectText;
 	public Text LinDragText;
 	public Text AngDragText;
+	bool connected = true;
 	DroneMove DM;
 	UdpClient udp;
 
 	void Start(){
+		connected = true;
 		DM = GameObject.FindGameObjectWithTag ("Player").GetComponent<DroneMove> ();
 		udp = GameObject.FindGameObjectWithTag ("System").GetComponent<UdpClient> ();
 	}
@@ -29,5 +31,8 @@ public class InfoUI : MonoBehaviour {
 	}
 	public void RestartBtn(){
 		SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
+	}
+	public void DisconnectBtn(){
+		udp.enabled = false;
 	}
 }
