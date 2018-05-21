@@ -150,7 +150,7 @@ public class UdpClient:MonoBehaviour
 		UpdateAltitude();//#141  ALTITUDE
 		UpdateBatteryStatus();//#147
 		UpdataEstimatorStatus();//#230 ESTIMATOR_STATUS
-		//UpdateVirbration();//#241 VIBRATION
+		UpdateVibration();//#241 VIBRATION
 		HomePosition ();//#242
 		UpdateExtendState();//#245 Extend
 
@@ -271,7 +271,7 @@ public class UdpClient:MonoBehaviour
 		Mvhud.alt = (float)latlonalt.alt;
 		Mvhud.climb = DM.curSpeedY;
 		Mvhud.heading = (short)player.transform.eulerAngles.y;
-		Mvhud.throttle = 0;//?????
+		Mvhud.throttle = (ushort)DM._throttle;
 
 		SendPacket (Mvhud);
 
@@ -289,9 +289,9 @@ public class UdpClient:MonoBehaviour
 		MattTar.body_pitch_rate = PitchS;
 		MattTar.body_roll_rate = RollS;
 		MattTar.body_yaw_rate = YawS;
-		MattTar.type_mask = 0;//??????
+		MattTar.type_mask = 0;
 		MattTar.q = qA;
-		MattTar.thrust = 0;//????????
+		MattTar.thrust = DM._thrust;//????????
 
 		SendPacket (MattTar);
 	}
@@ -356,14 +356,14 @@ public class UdpClient:MonoBehaviour
 
 		MhiIMU.time_usec = (uint)(time);
 
-		MhiIMU.xacc = 0;
-		MhiIMU.xgyro = 0;
+		MhiIMU.xacc = DM._AccelX;
+		MhiIMU.xgyro = DM.tiltVelocitySwerve;
 		MhiIMU.xmag = 0;
-		MhiIMU.yacc = 0;
-		MhiIMU.ygyro = 0;
+		MhiIMU.yacc = DM._AccelY;
+		MhiIMU.ygyro = DM.rotationYVelocity;
 		MhiIMU.ymag = 0;
-		MhiIMU.zacc = 0;
-		MhiIMU.zgyro = 0;
+		MhiIMU.zacc = DM._AccelZ;
+		MhiIMU.zgyro = DM.tiltVelocityForward;
 		MhiIMU.zmag = 0;
 
 		MhiIMU.temperature = 20;
@@ -384,7 +384,7 @@ public class UdpClient:MonoBehaviour
 		BatteryStatus.current_consumed = -1;
 		BatteryStatus.current_battery = -1;
 		BatteryStatus.battery_remaining = 100;
-		BatteryStatus.temperature = 0;
+		BatteryStatus.temperature = 20;
 		BatteryStatus.voltages = voltages;
 
 		BatteryStatus.type = (byte)MAV_BATTERY_TYPE.MAV_BATTERY_TYPE_UNKNOWN;
@@ -395,9 +395,9 @@ public class UdpClient:MonoBehaviour
 
 	void setPositionTargetLocal(){
 		setPositionL.time_boot_ms = (uint)time;
-		setPositionL.afx = 0;
-		setPositionL.afy = 0;
-		setPositionL.afz = 0;
+		setPositionL.afx = DM._AccelX;
+		setPositionL.afy = DM._AccelY;
+		setPositionL.afz = DM._AccelZ;
 		setPositionL.coordinate_frame = (byte)MAV_FRAME.MAV_FRAME_LOCAL_NED;
 		setPositionL.target_component = ComponentId;
 		setPositionL.target_system = SystemId;
@@ -416,9 +416,9 @@ public class UdpClient:MonoBehaviour
 
 	void PositionTargetLocal(){
 		positionL.time_boot_ms = (uint)time;
-		positionL.afx = 0;
-		positionL.afy = 0;
-		positionL.afz = 0;
+		positionL.afx = DM._AccelX;
+		positionL.afy = DM._AccelY;
+		positionL.afz = DM._AccelZ;
 		positionL.coordinate_frame = (byte)MAV_FRAME.MAV_FRAME_LOCAL_NED;
 		positionL.type_mask = 0;
 		positionL.vx = DM.curSpeedX;
@@ -436,9 +436,9 @@ public class UdpClient:MonoBehaviour
 	void setPositionTargetGlobal(){
 		setPositionG.time_boot_ms = (uint)time;
 
-		setPositionG.afx = 0;
-		setPositionG.afy = 0;
-		setPositionG.afz = 0;
+		setPositionG.afx = DM._AccelX;
+		setPositionG.afy = DM._AccelY;
+		setPositionG.afz = DM._AccelZ;
 		setPositionG.coordinate_frame = (byte)MAV_FRAME.MAV_FRAME_GLOBAL_TERRAIN_ALT_INT;
 		setPositionG.lat_int = (int)(latlonalt.lat*10000000);
 		setPositionG.lon_int = (int)(latlonalt.lon*10000000);
@@ -460,9 +460,9 @@ public class UdpClient:MonoBehaviour
 	void PositionTargetGlobal(){
 		PositionG.time_boot_ms = (uint)time;
 
-		PositionG.afx = 0;//???????
-		PositionG.afy = 0;//???????
-		PositionG.afz = 0;//???????
+		PositionG.afx = DM._AccelX;
+		PositionG.afy = DM._AccelY;
+		PositionG.afz = DM._AccelZ;
 		PositionG.coordinate_frame = (byte)MAV_FRAME.MAV_FRAME_GLOBAL_TERRAIN_ALT_INT;
 		PositionG.lat_int = (int)(latlonalt.lat*10000000);
 		PositionG.lon_int = (int)(latlonalt.lon*10000000);
@@ -504,14 +504,14 @@ public class UdpClient:MonoBehaviour
 		SendPacket (EstimatorStatus);
 	}
 
-	void UpdateVirbration(){//??????
+	void UpdateVibration(){//??????
 		Mvirbration.time_usec = (uint)time;
 		Mvirbration.clipping_0 = 0;
 		Mvirbration.clipping_1 = 0;
 		Mvirbration.clipping_2 = 0;
-		Mvirbration.vibration_x = 0;
-		Mvirbration.vibration_y = 0;
-		Mvirbration.vibration_z = 0;
+		Mvirbration.vibration_x = DM.vibrationZ;
+		Mvirbration.vibration_y = DM.vibrationX;
+		Mvirbration.vibration_z = DM.vibrationY;
 
 		SendPacket (Mvirbration);
 	}
