@@ -23,7 +23,7 @@ public class InfoUI : MonoBehaviour {
 		
 	void Update () {
 		SpeedText.text = "Speed : " + DM.curSpeed.ToString("n2") + " m/s";
-		RMPText.text = "RPM : " + DM.curRPM;
+		RMPText.text = "RPM : " + DM.curRPM.ToString("n3");
 		ConnectText.text = "Connect : " + udp.ConnectString;
 		LinDragText.text = "Drag : " + DM.Lineardrag.ToString("n4");
 		AngDragText.text = "Angular Drag : " + DM.AngularDrag.ToString("n4");

@@ -1,81 +1,33 @@
 fileFormatVersion: 2
-guid: fe5a6c6cbdaa347f5bd8b52c20bd9f16
-timeCreated: 1516865418
+guid: c7b7761081dab4db2959d66488ec658d
+timeCreated: 1526907043
 licenseType: Free
 ModelImporter:
   serializedVersion: 22
   fileIDToRecycleName:
-    100000: Circle
-    100002: //RootNode
-    100004: Helice1
-    100006: Helice2
-    100008: Helice3
-    100010: Helice4
-    400000: Circle
-    400002: //RootNode
-    400004: Helice1
-    400006: Helice2
-    400008: Helice3
-    400010: Helice4
-    2300000: Circle
-    2300002: Helice1
-    2300004: Helice2
-    2300006: Helice3
-    2300008: Helice4
-    3300000: Circle
-    3300002: Helice1
-    3300004: Helice2
-    3300006: Helice3
-    3300008: Helice4
-    4300000: Helice4
-    4300002: Helice3
-    4300004: Helice2
-    4300006: Helice1
-    4300008: Circle
-    6400000: Circle
-    6400002: Helice1
-    6400004: Helice2
-    6400006: Helice3
-    6400008: Helice4
-    7400000: Helice4|Cube.001Action.001
-    7400002: Helice4|Cube.002Action.001
-    7400004: Helice4|Cube.003Action.001
-    7400006: Helice3|Cube.001Action.001
-    7400008: Helice3|Cube.002Action.001
-    7400010: Helice3|Cube.003Action.001
-    7400012: Helice2|Cube.001Action.001
-    7400014: Helice2|Cube.002Action.001
-    7400016: Helice2|Cube.003Action.001
-    7400018: Helice1|Cube.001Action.001
-    7400020: Helice1|Cube.002Action.001
-    7400022: Helice1|Cube.003Action.001
+    100000: //RootNode
+    400000: //RootNode
+    2300000: //RootNode
+    3300000: //RootNode
+    4300000: Cube
+    7400000: Default Take
     9500000: //RootNode
   externalObjects:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: AtiraDrone
-    second: {fileID: 2100000, guid: 70211066e102f4b2f8169f4fd996fb87, type: 2}
+      name: Material
+    second: {fileID: 2100000, guid: d28d5a853e7dc4580a3de9faa6469a12, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: DroneCorpo
-    second: {fileID: 2100000, guid: 70211066e102f4b2f8169f4fd996fb87, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Helice
-    second: {fileID: 2100000, guid: 598b7989c166d457194d0ce397a48c2f, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: MiraDrone
-    second: {fileID: 2100000, guid: 33a83df2108ab43e190e078abdeb97bd, type: 2}
+      name: Material__NCCU_png
+    second: {fileID: 2100000, guid: d393ce08708324362a9786e9cc466e55, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
     materialSearch: 1
-    materialLocation: 1
+    materialLocation: 0
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
@@ -101,8 +53,8 @@ ModelImporter:
   meshes:
     lODScreenPercentages: []
     globalScale: 1
-    meshCompression: 3
-    addColliders: 1
+    meshCompression: 0
+    addColliders: 0
     importVisibility: 1
     importBlendShapes: 1
     importCameras: 1

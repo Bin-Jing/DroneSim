@@ -87,6 +87,22 @@ ModelImporter:
     4300026: mesh_out_node_MeshPart13
     4300028: mesh_out_node_MeshPart14
     4300030: mesh_out_node_MeshPart15
+    6400000: mesh_out_node_MeshPart0
+    6400002: mesh_out_node_MeshPart1
+    6400004: mesh_out_node_MeshPart10
+    6400006: mesh_out_node_MeshPart11
+    6400008: mesh_out_node_MeshPart12
+    6400010: mesh_out_node_MeshPart13
+    6400012: mesh_out_node_MeshPart14
+    6400014: mesh_out_node_MeshPart15
+    6400016: mesh_out_node_MeshPart2
+    6400018: mesh_out_node_MeshPart3
+    6400020: mesh_out_node_MeshPart4
+    6400022: mesh_out_node_MeshPart5
+    6400024: mesh_out_node_MeshPart6
+    6400026: mesh_out_node_MeshPart7
+    6400028: mesh_out_node_MeshPart8
+    6400030: mesh_out_node_MeshPart9
   externalObjects:
   - first:
       type: UnityEngine:Material
@@ -124,7 +140,7 @@ ModelImporter:
     lODScreenPercentages: []
     globalScale: 1
     meshCompression: 0
-    addColliders: 0
+    addColliders: 1
     importVisibility: 1
     importBlendShapes: 1
     importCameras: 1

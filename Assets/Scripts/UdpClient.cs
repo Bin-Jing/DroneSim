@@ -119,9 +119,9 @@ public class UdpClient:MonoBehaviour
 	void Update()
 	{
 		
-		PitchS = DM.tiltVelocityForward;
+		PitchS = DM.rotationZVelocity;
 		YawS = DM.rotationYVelocity;
-		RollS = DM.tiltVelocitySwerve;
+		RollS = DM.rotationXVelocity;
 
 		if (socket.Connected) {
 			ConnectString = serverEnd.ToString();
@@ -357,13 +357,14 @@ public class UdpClient:MonoBehaviour
 		MhiIMU.time_usec = (uint)(time);
 
 		MhiIMU.xacc = DM._AccelX;
-		MhiIMU.xgyro = DM.tiltVelocitySwerve;
+
+		MhiIMU.xgyro = RollS;
 		MhiIMU.xmag = 0;
 		MhiIMU.yacc = DM._AccelY;
-		MhiIMU.ygyro = DM.rotationYVelocity;
+		MhiIMU.ygyro =YawS;
 		MhiIMU.ymag = 0;
 		MhiIMU.zacc = DM._AccelZ;
-		MhiIMU.zgyro = DM.tiltVelocityForward;
+		MhiIMU.zgyro = PitchS;
 		MhiIMU.zmag = 0;
 
 		MhiIMU.temperature = 20;

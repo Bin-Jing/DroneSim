@@ -14,7 +14,7 @@ public class DroneMove : MonoBehaviour {
 	float timer;
 	//drone para
 //	float DroneCrossSection = 0;
-	public float droneWeight = 3f; //kg
+	public float droneWeight = 1f; //kg
 	public float DroneLength = 0.5f; //m
 	public float DroneWedth = 0.5f; //m
 	float Tor = 0f;
@@ -39,10 +39,12 @@ public class DroneMove : MonoBehaviour {
 
 
 	//RotationXZ
-	float tiltAmountForward = 0f;
-	float tiltAmountSwerve = 0f;
-	[HideInInspector]public float tiltVelocityForward = 0f;
-	[HideInInspector]public float tiltVelocitySwerve = 0f;
+	float currentXRotation = 0f;
+	float currentZRotation = 0f;
+	float tiltVelocityForward = 0f;
+	float tiltVelocitySwerve = 0f;
+	[HideInInspector]public float rotationXVelocity = 0f;
+	[HideInInspector]public float rotationZVelocity = 0f;
 	float tiltAmount = 0;//control the max rotation
 
 	//Speed
@@ -104,7 +106,7 @@ public class DroneMove : MonoBehaviour {
 		_rigidbody.AddRelativeForce ( Vector3.up * upForce);
 
 
-		_rigidbody.rotation = Quaternion.Euler (new Vector3(tiltAmountForward, currentYRotation, tiltAmountSwerve));
+		_rigidbody.rotation = Quaternion.Euler (new Vector3(currentXRotation, currentYRotation, currentZRotation));
 		updateSpeedInfo ();
 
 		//print (_rigidbody.velocity);
@@ -169,14 +171,14 @@ public class DroneMove : MonoBehaviour {
 	void MovemenForward(){
 		if (Input.GetAxis ("Vertical") != 0) {
 			Tor = (1f / (2 * Mathf.PI)) * powerCoefficient * airDensity
-				* Mathf.Pow (rotationAmount, 2) * Mathf.Pow (propellerDiameter, 5) * Input.GetAxis ("FlyUp");
+				* Mathf.Pow (rotationZVelocity, 2) * Mathf.Pow (propellerDiameter, 5) * Input.GetAxis ("FlyUp");
 			_rigidbody.AddRelativeForce (Vector3.forward * upForce * Mathf.Abs (Mathf.Sin (_rigidbody.rotation.eulerAngles.x * Mathf.PI / 180))
 			* Input.GetAxis ("Vertical"));
 			_rigidbody.AddRelativeTorque (Vector3.forward * Tor);
-			if (Input.GetAxis ("Vertical") > 0) {
-				tiltAmountForward = Mathf.SmoothDamp (tiltAmountForward, tiltAmount , ref tiltVelocityForward, 1f);
+			if (Input.GetAxis ("Vertical") >= 0) {
+				currentXRotation = Mathf.SmoothDamp (currentXRotation, tiltAmount , ref tiltVelocityForward, 1f);
 			} else if (Input.GetAxis ("Vertical") < 0) {
-				tiltAmountForward = Mathf.SmoothDamp (tiltAmountForward, -tiltAmount , ref tiltVelocityForward, 1f);
+				currentXRotation = Mathf.SmoothDamp (currentXRotation, -tiltAmount , ref tiltVelocityForward, 1f);
 			}
 
 		}
@@ -184,14 +186,14 @@ public class DroneMove : MonoBehaviour {
 	void Swerve(){
 		if (Input.GetAxis ("Horizontal") != 0) {
 			Tor = (1f / (2 * Mathf.PI)) * powerCoefficient * airDensity
-				* Mathf.Pow (rotationAmount, 2) * Mathf.Pow (propellerDiameter, 5) * Input.GetAxis ("FlyUp");
+				* Mathf.Pow (rotationXVelocity, 2) * Mathf.Pow (propellerDiameter, 5) * Input.GetAxis ("FlyUp");
 			_rigidbody.AddRelativeForce (Vector3.right * upForce * Mathf.Abs (Mathf.Sin (_rigidbody.rotation.eulerAngles.z * Mathf.PI / 180))
 			* Input.GetAxis ("Horizontal"));
 			_rigidbody.AddRelativeTorque (Vector3.right * Tor);
-			if (Input.GetAxis ("Horizontal") > 0) {
-				tiltAmountSwerve = Mathf.SmoothDamp (tiltAmountSwerve, -tiltAmount , ref tiltVelocitySwerve, 1f);
+			if (Input.GetAxis ("Horizontal") >= 0) {
+				currentZRotation = Mathf.SmoothDamp (currentZRotation, -tiltAmount , ref tiltVelocitySwerve, 1f);
 			} else if (Input.GetAxis ("Horizontal") < 0) {
-				tiltAmountSwerve = Mathf.SmoothDamp (tiltAmountSwerve, tiltAmount , ref tiltVelocitySwerve, 1f);
+				currentZRotation = Mathf.SmoothDamp (currentZRotation, tiltAmount , ref tiltVelocitySwerve, 1f);
 			}
 
 		}
@@ -207,7 +209,7 @@ public class DroneMove : MonoBehaviour {
 					 
 					
 			}
-			rotationAmount = AngularAcceleration * Time.deltaTime;
+
 			YRotation += rotationAmount * Input.GetAxis ("Rotation") ;
 			
 		}
@@ -246,18 +248,19 @@ public class DroneMove : MonoBehaviour {
 		_rigidbody.angularDrag = (Mathf.PI * AngularDragCoefficient / 5f) * airDensity
 			* Mathf.Pow (rotationYVelocity, 2) * Mathf.Pow (((DroneWedth / 2f) + (DroneLength / 2f)) / 2f, 5)+
 			(Mathf.PI * AngularDragCoefficient / 5f) * airDensity
-			* Mathf.Pow (tiltVelocityForward, 2) * Mathf.Pow (((DroneWedth / 2f) + (DroneLength / 2f)) / 2f, 5)+
+			* Mathf.Pow (rotationZVelocity, 2) * Mathf.Pow (((DroneWedth / 2f) + (DroneLength / 2f)) / 2f, 5)+
 			(Mathf.PI * AngularDragCoefficient / 5f) * airDensity
-			* Mathf.Pow (tiltVelocitySwerve, 2) * Mathf.Pow (((DroneWedth / 2f) + (DroneLength / 2f)) / 2f, 5);
+			* Mathf.Pow (rotationXVelocity, 2) * Mathf.Pow (((DroneWedth / 2f) + (DroneLength / 2f)) / 2f, 5);
 		AngularDrag = _rigidbody.angularDrag;
 	}
 	void updateAngularAcceleration(){
 		float TorNet = Tor + (propellerDiameter/2) * upForce - _rigidbody.angularDrag;
 		AngularAcceleration = TorNet / _constval.GetMomentInertia ();
-//		print (AngularAcceleration);
-
+		rotationAmount = AngularAcceleration * Time.deltaTime;
+		print (vibrationX);
 	}
 	void updateSpeedInfo(){
+		_rigidbody.mass = droneWeight;
 		_throttle = (curRPM / maxRPM) * 100;
 		_Acceleration = (_rigidbody.velocity.magnitude - curSpeed)/Time.deltaTime;
 		_thrust = _rigidbody.mass * _Acceleration;
@@ -268,15 +271,26 @@ public class DroneMove : MonoBehaviour {
 		curSpeedX = _rigidbody.velocity.x;
 		curSpeedY = _rigidbody.velocity.y;
 		curSpeedZ = _rigidbody.velocity.z;
-		vibrationX = (transform.rotation.eulerAngles.x - oldXRotation)/Time.deltaTime;
-		vibrationY = (transform.rotation.eulerAngles.y - oldYRotation)/Time.deltaTime;
-		vibrationZ = (transform.rotation.eulerAngles.z - oldZRotation)/Time.deltaTime;
+		vibrationX = (transform.rotation.eulerAngles.x - oldXRotation);
+		vibrationY = (transform.rotation.eulerAngles.y - oldYRotation);
+		vibrationZ = (transform.rotation.eulerAngles.z - oldZRotation);
+		if (Mathf.Abs(vibrationX) > 100) {
+			rotationXVelocity = 0;
+		} else {
+			rotationXVelocity = vibrationX/Time.deltaTime;
+		}
+		if (Mathf.Abs(vibrationZ) > 100) {
+			rotationZVelocity = 0;
+		} else {
+			rotationZVelocity = vibrationZ/Time.deltaTime;
+		}
+
 		oldXRotation = transform.rotation.eulerAngles.x;
 		oldYRotation = transform.rotation.eulerAngles.y;
 		oldZRotation = transform.rotation.eulerAngles.z;
 	}
 	float HoverControlInput(){
-		return 0.42f;
+		return 0.5f;
 	}
 	void OnCollisionEnter (Collision col){
 		CurCollision = "Collision detected";
