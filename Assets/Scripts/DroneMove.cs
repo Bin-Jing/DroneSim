@@ -274,16 +274,19 @@ public class DroneMove : MonoBehaviour {
 		vibrationX = (transform.rotation.eulerAngles.x - oldXRotation);
 		vibrationY = (transform.rotation.eulerAngles.y - oldYRotation);
 		vibrationZ = (transform.rotation.eulerAngles.z - oldZRotation);
-		if (Mathf.Abs(vibrationX) > 100) {
-			rotationXVelocity = 0;
-		} else {
-			rotationXVelocity = vibrationX/Time.deltaTime;
+		if (vibrationX > 180) {
+			vibrationX -= 360;
+		} else if(vibrationX < -180){
+			vibrationX += 360;
 		}
-		if (Mathf.Abs(vibrationZ) > 100) {
-			rotationZVelocity = 0;
-		} else {
-			rotationZVelocity = vibrationZ/Time.deltaTime;
+
+		if (vibrationZ > 180) {
+			vibrationZ -= 360;
+		} else if(vibrationZ < -180){
+			vibrationZ += 360;
 		}
+		rotationXVelocity = vibrationX/Time.deltaTime;
+		rotationZVelocity = vibrationZ/Time.deltaTime;
 
 		oldXRotation = transform.rotation.eulerAngles.x;
 		oldYRotation = transform.rotation.eulerAngles.y;
