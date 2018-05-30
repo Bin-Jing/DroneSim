@@ -357,7 +357,6 @@ public class UdpClient:MonoBehaviour
 		MhiIMU.time_usec = (uint)(time);
 
 		MhiIMU.xacc = DM._AccelX;
-
 		MhiIMU.xgyro = RollS;
 		MhiIMU.xmag = 0;
 		MhiIMU.yacc = DM._AccelY;

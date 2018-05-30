@@ -205,7 +205,7 @@ public class DroneMove : MonoBehaviour {
 				upForce = thrustCoefficient * airDensity * Mathf.Pow (propellerVelocity, 2)
 					* Mathf.Pow (propellerDiameter, 4) * HoverControlInput();
 				
-				curRPM = Mathf.SmoothDamp (curRPM, maxRPM * Mathf.Abs(Input.GetAxis ("Rotation")), ref refRPM, 1/Mathf.Pow(2,0.5f));
+				curRPM = maxRPM * Mathf.Abs(Input.GetAxis ("Rotation"))*HoverControlInput();
 					 
 					
 			}
@@ -257,7 +257,6 @@ public class DroneMove : MonoBehaviour {
 		float TorNet = Tor + (propellerDiameter/2) * upForce - _rigidbody.angularDrag;
 		AngularAcceleration = TorNet / _constval.GetMomentInertia ();
 		rotationAmount = AngularAcceleration * Time.deltaTime;
-		print (vibrationX);
 	}
 	void updateSpeedInfo(){
 		_rigidbody.mass = droneWeight;

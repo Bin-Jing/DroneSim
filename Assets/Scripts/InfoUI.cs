@@ -14,7 +14,6 @@ public class InfoUI : MonoBehaviour {
 	bool connected = true;
 	DroneMove DM;
 	UdpClient udp;
-
 	void Start(){
 		connected = true;
 		DM = GameObject.FindGameObjectWithTag ("Player").GetComponent<DroneMove> ();
@@ -24,15 +23,22 @@ public class InfoUI : MonoBehaviour {
 	void Update () {
 		SpeedText.text = "Speed : " + DM.curSpeed.ToString("n2") + " m/s";
 		RMPText.text = "RPM : " + DM.curRPM.ToString("n3");
-		ConnectText.text = "Connect : " + udp.ConnectString;
+
 		LinDragText.text = "Drag : " + DM.Lineardrag.ToString("n4");
 		AngDragText.text = "Angular Drag : " + DM.AngularDrag.ToString("n4");
 		CollisionText.text = DM.CurCollision;
+		if (connected) {
+			ConnectText.text = "Drone State - connect: " + udp.ConnectString;
+		} else {
+			ConnectText.text = "Drone State - connect: false";
+		}
+
 	}
 	public void RestartBtn(){
 		SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
 	}
 	public void DisconnectBtn(){
 		udp.enabled = false;
+		connected = false;
 	}
 }
