@@ -26,5 +26,17 @@ public class RollerAgent : Agent
 				Random.value * 8 - 4);
 		}
 	}
+	public override List<float> CollectState()
+	{
+		List<float> state = new List<float>();
+		Vector3 velocity = GetComponent<Rigidbody>().velocity;
+
+		state.Add(velocity.x);
+		state.Add(velocity.y);
+		state.Add(velocity.z);
+
+
+		return state;
+	}
 
 }

@@ -11,9 +11,9 @@ public class LatLonAlt : MonoBehaviour {
 	public double lon;
 	public double alt;
 
-	public double Startlat;
-	public double Startlon;
-	public double Startalt;
+	[HideInInspector]public double Startlat;
+	[HideInInspector]public double Startlon;
+	[HideInInspector]public double Startalt;
 	float EARTH_RADIUS;
 	// Use this for initialization
 	void Start () {
