@@ -60,7 +60,7 @@ public class DroneMove : MonoBehaviour {
 	[HideInInspector]public float _throttle;
 
 	//RotationY
-	[HideInInspector]float YRotation = 180f;
+	[HideInInspector]float YRotation = 0f;
 	[HideInInspector]public float currentYRotation;
 	[HideInInspector]float rotationAmount = 0f;
 	[HideInInspector]public float rotationYVelocity = 0f;
@@ -75,12 +75,14 @@ public class DroneMove : MonoBehaviour {
 
 	// Use this for initialization
 	void Awake () {
-		currentYRotation = 180f;
+		
 		_constval = GetComponent<ConstValue> ();
 		_rigidbody = GetComponent<Rigidbody>();
 		transform = GetComponent<Transform> ();
 		valueInitialize ();
 		timer = 0;
+		currentYRotation = transform.eulerAngles.y;
+		YRotation = currentYRotation;
 
 	}
 	

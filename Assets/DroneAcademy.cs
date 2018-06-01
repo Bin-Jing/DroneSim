@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RollerAcademy : Academy {
+public class DroneAcademy : Academy {
 
 
 }

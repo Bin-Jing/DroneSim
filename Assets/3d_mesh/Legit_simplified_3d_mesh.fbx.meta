@@ -1,7 +1,5 @@
 fileFormatVersion: 2
 guid: e6846b69dcfbc4a2481ebf8acbf74123
-timeCreated: 1521623970
-licenseType: Free
 ModelImporter:
   serializedVersion: 22
   fileIDToRecycleName:
@@ -55,6 +53,7 @@ ModelImporter:
     2300026: mesh_out_node_MeshPart7
     2300028: mesh_out_node_MeshPart8
     2300030: mesh_out_node_MeshPart9
+    2300032: //RootNode
     3300000: mesh_out_node_MeshPart0
     3300002: mesh_out_node_MeshPart1
     3300004: mesh_out_node_MeshPart10
@@ -71,6 +70,7 @@ ModelImporter:
     3300026: mesh_out_node_MeshPart7
     3300028: mesh_out_node_MeshPart8
     3300030: mesh_out_node_MeshPart9
+    3300032: //RootNode
     4300000: mesh_out_node_MeshPart0
     4300002: mesh_out_node_MeshPart1
     4300004: mesh_out_node_MeshPart2
@@ -87,6 +87,7 @@ ModelImporter:
     4300026: mesh_out_node_MeshPart13
     4300028: mesh_out_node_MeshPart14
     4300030: mesh_out_node_MeshPart15
+    4300032: mesh_out_node
     6400000: mesh_out_node_MeshPart0
     6400002: mesh_out_node_MeshPart1
     6400004: mesh_out_node_MeshPart10
@@ -103,6 +104,8 @@ ModelImporter:
     6400026: mesh_out_node_MeshPart7
     6400028: mesh_out_node_MeshPart8
     6400030: mesh_out_node_MeshPart9
+    6400032: //RootNode
+    2186277476908879412: ImportLogs
   externalObjects:
   - first:
       type: UnityEngine:Material
@@ -127,6 +130,7 @@ ModelImporter:
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
+    importConstraints: 0
     animationCompression: 1
     animationRotationError: 0.5
     animationPositionError: 0.5
@@ -151,6 +155,8 @@ ModelImporter:
     optimizeMeshForGPU: 1
     keepQuads: 0
     weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
