@@ -71,7 +71,7 @@ public class DroneMove : MonoBehaviour {
 	float oldXRotation;
 	float oldYRotation;
 	float oldZRotation;
-
+   
 
 	// Use this for initialization
 	void Awake () {
@@ -88,6 +88,8 @@ public class DroneMove : MonoBehaviour {
 	
 	// Update is called once per frame
 	void FixedUpdate () {
+        
+
 		timer += Time.deltaTime;
 		updateEnvironmentForce ();
 		_rigidbody.AddForce (new Vector3(0, -_gravity*droneWeight,0));
@@ -111,7 +113,8 @@ public class DroneMove : MonoBehaviour {
 		_rigidbody.rotation = Quaternion.Euler (new Vector3(currentXRotation, currentYRotation, currentZRotation));
 		updateSpeedInfo ();
 
-		//print (_rigidbody.velocity);
+        //print (_rigidbody.velocity.magnitude);
+        //print(_rigidbody.angularVelocity);
 
 	}
 	void valueInitialize(){
@@ -129,7 +132,7 @@ public class DroneMove : MonoBehaviour {
 		linearDragCoefficient = _constval.GetClin ();
 		AngularDragCoefficient = _constval.GetC_AngularDrag ();
 	}
-	void PropellerForce(){
+    void PropellerForce(){
 		
 		if ((Mathf.Abs (Input.GetAxis ("Vertical")) > 0.2f) || (Mathf.Abs (Input.GetAxis ("Horizontal")) > 0.2f)) {
 			
@@ -256,7 +259,7 @@ public class DroneMove : MonoBehaviour {
 		AngularDrag = _rigidbody.angularDrag;
 	}
 	void updateAngularAcceleration(){
-		float TorNet = Tor + (propellerDiameter/2) * upForce - _rigidbody.angularDrag;
+		float TorNet = Tor + (propellerDiameter/2) * upForce/4 - _rigidbody.angularDrag;
 		AngularAcceleration = TorNet / _constval.GetMomentInertia ();
 		rotationAmount = AngularAcceleration * Time.deltaTime;
 	}
@@ -292,9 +295,10 @@ public class DroneMove : MonoBehaviour {
 		oldXRotation = transform.rotation.eulerAngles.x;
 		oldYRotation = transform.rotation.eulerAngles.y;
 		oldZRotation = transform.rotation.eulerAngles.z;
+        print(rotationYVelocity);
 	}
 	float HoverControlInput(){
-		return 0.5f;
+		return 0.4f;
 	}
 	void OnCollisionEnter (Collision col){
 		CurCollision = "Collision detected";
@@ -302,4 +306,5 @@ public class DroneMove : MonoBehaviour {
 	void OnCollisionExit (Collision col){
 		CurCollision = "";
 	}
+
 }
