@@ -7,6 +7,9 @@ TagManager:
   - Ground
   - System
   - apron
+  - Target
+  - Block
+  - Blocks
   layers:
   - Default
   - TransparentFX
@@ -16,7 +19,7 @@ TagManager:
   - UI
   - 
   - 
-  - 
+  - Target
   - 
   - 
   - 

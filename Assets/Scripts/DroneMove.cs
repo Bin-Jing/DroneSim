@@ -35,6 +35,7 @@ public class DroneMove : MonoBehaviour {
 	float _gravity = 9.81f;
 	public float Lineardrag = 0f;
 	public float AngularDrag = 0f;
+    public bool MLAgent = false;
 	[HideInInspector]public float _thrust;
 
 
@@ -44,6 +45,7 @@ public class DroneMove : MonoBehaviour {
 	float tiltVelocityForward = 0f;
 	float tiltVelocitySwerve = 0f;
 	[HideInInspector]public float rotationXVelocity = 0f;
+    [HideInInspector] public float rotationYVelocity = 0f;
 	[HideInInspector]public float rotationZVelocity = 0f;
 	float tiltAmount = 0;//control the max rotation
 
@@ -63,7 +65,7 @@ public class DroneMove : MonoBehaviour {
 	[HideInInspector]float YRotation = 0f;
 	[HideInInspector]public float currentYRotation;
 	[HideInInspector]float rotationAmount = 0f;
-	[HideInInspector]public float rotationYVelocity = 0f;
+	[HideInInspector]public float rotationVelocity = 0f;
 
 	[HideInInspector]public float vibrationX;
 	[HideInInspector]public float vibrationY;
@@ -81,8 +83,8 @@ public class DroneMove : MonoBehaviour {
 		transform = GetComponent<Transform> ();
 		valueInitialize ();
 		timer = 0;
-		currentYRotation = transform.eulerAngles.y;
-		YRotation = currentYRotation;
+        currentYRotation = transform.eulerAngles.y;
+        YRotation = currentYRotation;
 
 	}
 	
@@ -109,7 +111,6 @@ public class DroneMove : MonoBehaviour {
 
 		_rigidbody.AddRelativeForce ( Vector3.up * upForce);
 
-
 		_rigidbody.rotation = Quaternion.Euler (new Vector3(currentXRotation, currentYRotation, currentZRotation));
 		updateSpeedInfo ();
 
@@ -132,93 +133,222 @@ public class DroneMove : MonoBehaviour {
 		linearDragCoefficient = _constval.GetClin ();
 		AngularDragCoefficient = _constval.GetC_AngularDrag ();
 	}
-    void PropellerForce(){
+    public void PropellerForce(float ver = 0,float hor = 0,float Fup = 0){
+        if(!MLAgent){
+            if ((Mathf.Abs(Input.GetAxis("Vertical")) > 0.2f) || (Mathf.Abs(Input.GetAxis("Horizontal")) > 0.2f))
+            {
+
+                if (Input.GetAxis("FlyUp") == 0 && (Mathf.Abs(Input.GetAxis("Vertical")) > 0.2f))
+                {
+                    upForce = thrustCoefficient * airDensity * Mathf.Pow(propellerVelocity, 2)
+                        * Mathf.Pow(propellerDiameter, 4) * Mathf.Abs(Input.GetAxis("Vertical"));
+                    curRPM = Mathf.Abs(maxRPM * Input.GetAxis("Vertical"));
+
+                    tiltAmount = 40;
+                }
+                if (Input.GetAxis("FlyUp") == 0 && (Mathf.Abs(Input.GetAxis("Horizontal")) > 0.2f))
+                {
+                    upForce = thrustCoefficient * airDensity * Mathf.Pow(propellerVelocity, 2)
+                        * Mathf.Pow(propellerDiameter, 4) * Mathf.Abs(Input.GetAxis("Horizontal"));
+                    curRPM = Mathf.Abs(maxRPM * Input.GetAxis("Horizontal"));
+                    tiltAmount = 40;
+                }
+
+            }
+
+            if (Mathf.Abs(Input.GetAxis("FlyUp")) >= 0.3f)
+            {
+
+                upForce = thrustCoefficient * airDensity * Mathf.Pow(propellerVelocity, 2)
+                    * Mathf.Pow(propellerDiameter, 4) * Input.GetAxis("FlyUp");
+
+                if ((Mathf.Abs(Input.GetAxis("Vertical")) != 0) || (Mathf.Abs(Input.GetAxis("Horizontal")) != 0))
+                {
+                    tiltAmount = 20;
+                }
+                else
+                {
+                    tiltAmount = 0;
+                }
+                curRPM = Mathf.Abs(maxRPM * Input.GetAxis("FlyUp"));
+
+            }
+
+            if (Input.GetAxis("FlyUp") == 0 && Input.GetAxis("Vertical") == 0 && Input.GetAxis("Horizontal") == 0)
+            {
+
+                upForce = Mathf.SmoothDamp(upForce, 0, ref refForce, 1f);
+                curRPM = Mathf.SmoothDamp(curRPM, 0, ref refRPM, 1 / Mathf.Pow(2, 0.5f));
+            }
+        }else{
+            if ((Mathf.Abs(ver) > 0.2f) || (Mathf.Abs(hor) > 0.2f))
+            {
+
+                if (Fup == 0 && (ver > 0.2f))
+                {
+                    upForce = thrustCoefficient * airDensity * Mathf.Pow(propellerVelocity, 2)
+                        * Mathf.Pow(propellerDiameter, 4) * ver;
+                    curRPM = Mathf.Abs(maxRPM * ver);
+
+                    tiltAmount = 40;
+                }
+
+            }
+
+            if (Mathf.Abs(Fup) >= 0.3f)
+            {
+
+                upForce = thrustCoefficient * airDensity * Mathf.Pow(propellerVelocity, 2)
+                    * Mathf.Pow(propellerDiameter, 4) * Fup;
+
+                if ((Mathf.Abs(ver) != 0) || (Mathf.Abs(hor) != 0))
+                {
+                    tiltAmount = 20;
+                }
+                else
+                {
+                    tiltAmount = 0;
+                }
+                curRPM = Mathf.Abs(maxRPM * Fup);
+
+            }
+
+            if (Fup == 0 && ver == 0 && hor == 0)
+            {
+
+                upForce = Mathf.SmoothDamp(upForce, 0, ref refForce, 1f);
+                curRPM = Mathf.SmoothDamp(curRPM, 0, ref refRPM, 1 / Mathf.Pow(2, 0.5f));
+            }
+        }
 		
-		if ((Mathf.Abs (Input.GetAxis ("Vertical")) > 0.2f) || (Mathf.Abs (Input.GetAxis ("Horizontal")) > 0.2f)) {
-			
-			if (Input.GetAxis("FlyUp") == 0 && (Mathf.Abs (Input.GetAxis ("Vertical")) > 0.2f)) {
-				upForce = thrustCoefficient * airDensity * Mathf.Pow (propellerVelocity, 2) 
-					* Mathf.Pow (propellerDiameter, 4) * Mathf.Abs(Input.GetAxis ("Vertical"));
-				curRPM = Mathf.Abs(maxRPM * Input.GetAxis ("Vertical"));
-
-				tiltAmount = 40;
-			}
-			if (Input.GetAxis("FlyUp") == 0 && (Mathf.Abs (Input.GetAxis ("Horizontal")) > 0.2f)) {
-				upForce = thrustCoefficient * airDensity * Mathf.Pow (propellerVelocity, 2) 
-					* Mathf.Pow (propellerDiameter, 4) * Mathf.Abs(Input.GetAxis ("Horizontal"));
-				curRPM = Mathf.Abs(maxRPM * Input.GetAxis ("Horizontal"));
-				tiltAmount = 40;
-			}
-
-		}
-
-		if (Mathf.Abs (Input.GetAxis ("FlyUp")) >= 0.3f) {
-			
-			upForce = thrustCoefficient * airDensity * Mathf.Pow (propellerVelocity, 2)
-				* Mathf.Pow (propellerDiameter, 4) * Input.GetAxis ("FlyUp");
-			
-			if ((Mathf.Abs (Input.GetAxis ("Vertical")) != 0) || (Mathf.Abs (Input.GetAxis ("Horizontal")) != 0)) {
-				tiltAmount = 20;
-			} else {
-				tiltAmount = 0;
-			}
-			curRPM = Mathf.Abs(maxRPM * Input.GetAxis ("FlyUp"));
-
-		}  
-
-		if(Input.GetAxis("FlyUp") == 0 && Input.GetAxis ("Vertical") == 0 && Input.GetAxis ("Horizontal") == 0){
-			
-			upForce = Mathf.SmoothDamp (upForce, 0, ref refForce, 1f);
-			curRPM = Mathf.SmoothDamp (curRPM, 0, ref refRPM, 1/Mathf.Pow(2,0.5f));
-		}
 
 	}
-	void MovemenForward(){
-		if (Input.GetAxis ("Vertical") != 0) {
-			Tor = (1f / (2 * Mathf.PI)) * powerCoefficient * airDensity
-				* Mathf.Pow (rotationZVelocity, 2) * Mathf.Pow (propellerDiameter, 5) * Input.GetAxis ("FlyUp");
-			_rigidbody.AddRelativeForce (Vector3.forward * upForce * Mathf.Abs (Mathf.Sin (_rigidbody.rotation.eulerAngles.x * Mathf.PI / 180))
-			* Input.GetAxis ("Vertical"));
-			_rigidbody.AddRelativeTorque (Vector3.forward * Tor);
-			if (Input.GetAxis ("Vertical") >= 0) {
-				currentXRotation = Mathf.SmoothDamp (currentXRotation, tiltAmount , ref tiltVelocityForward, 1f);
-			} else if (Input.GetAxis ("Vertical") < 0) {
-				currentXRotation = Mathf.SmoothDamp (currentXRotation, -tiltAmount , ref tiltVelocityForward, 1f);
-			}
+    public void MovemenForward(float ver = 0, float hor = 0, float Fup = 0){
 
-		}
+        if(!MLAgent){
+            if (Input.GetAxis("Vertical") != 0)
+            {
+                Tor = (1f / (2 * Mathf.PI)) * powerCoefficient * airDensity
+                    * Mathf.Pow(rotationZVelocity, 2) * Mathf.Pow(propellerDiameter, 5) * Input.GetAxis("FlyUp");
+                _rigidbody.AddRelativeForce(Vector3.forward * upForce * Mathf.Abs(Mathf.Sin(_rigidbody.rotation.eulerAngles.x * Mathf.PI / 180))
+                * Input.GetAxis("Vertical"));
+                _rigidbody.AddRelativeTorque(Vector3.forward * Tor);
+                if (Input.GetAxis("Vertical") >= 0)
+                {
+                    currentXRotation = Mathf.SmoothDamp(currentXRotation, tiltAmount, ref tiltVelocityForward, 1f);
+                }
+                else if (Input.GetAxis("Vertical") < 0)
+                {
+                    currentXRotation = Mathf.SmoothDamp(currentXRotation, -tiltAmount, ref tiltVelocityForward, 1f);
+                }
+
+            }
+        }else{
+            if (ver != 0)
+            {
+                
+                if (ver >= 0)
+                {
+                    currentXRotation = Mathf.SmoothDamp(currentXRotation, tiltAmount, ref tiltVelocityForward, 1f);
+                    Tor = (1f / (2 * Mathf.PI)) * powerCoefficient * airDensity
+                    * Mathf.Pow(rotationZVelocity, 2) * Mathf.Pow(propellerDiameter, 5) * Fup;
+                    _rigidbody.AddRelativeForce(Vector3.forward * upForce * Mathf.Abs(Mathf.Sin(_rigidbody.rotation.eulerAngles.x * Mathf.PI / 180))
+                    * ver);
+                    _rigidbody.AddRelativeTorque(Vector3.forward * Tor);
+                }
+                else if (ver < 0)
+                {
+                    currentXRotation = Mathf.SmoothDamp(currentXRotation, -tiltAmount, ref tiltVelocityForward, 1f);
+                    Tor = (1f / (2 * Mathf.PI)) * powerCoefficient * airDensity
+                    * Mathf.Pow(rotationZVelocity, 2) * Mathf.Pow(propellerDiameter, 5) * Fup;
+                    _rigidbody.AddRelativeForce(Vector3.forward * upForce * Mathf.Abs(Mathf.Sin(_rigidbody.rotation.eulerAngles.x * Mathf.PI / 180))
+                    * ver);
+                    _rigidbody.AddRelativeTorque(Vector3.forward * Tor);
+                }
+
+            }
+        }
+		
 	}
-	void Swerve(){
-		if (Input.GetAxis ("Horizontal") != 0) {
-			Tor = (1f / (2 * Mathf.PI)) * powerCoefficient * airDensity
-				* Mathf.Pow (rotationXVelocity, 2) * Mathf.Pow (propellerDiameter, 5) * Input.GetAxis ("FlyUp");
-			_rigidbody.AddRelativeForce (Vector3.right * upForce * Mathf.Abs (Mathf.Sin (_rigidbody.rotation.eulerAngles.z * Mathf.PI / 180))
-			* Input.GetAxis ("Horizontal"));
-			_rigidbody.AddRelativeTorque (Vector3.right * Tor);
-			if (Input.GetAxis ("Horizontal") >= 0) {
-				currentZRotation = Mathf.SmoothDamp (currentZRotation, -tiltAmount , ref tiltVelocitySwerve, 1f);
-			} else if (Input.GetAxis ("Horizontal") < 0) {
-				currentZRotation = Mathf.SmoothDamp (currentZRotation, tiltAmount , ref tiltVelocitySwerve, 1f);
-			}
+    public void Swerve(float ver = 0, float hor = 0, float Fup = 0){
+        if(!MLAgent){
+            if (Input.GetAxis("Horizontal") != 0)
+            {
+                Tor = (1f / (2 * Mathf.PI)) * powerCoefficient * airDensity
+                    * Mathf.Pow(rotationXVelocity, 2) * Mathf.Pow(propellerDiameter, 5) * Input.GetAxis("FlyUp");
+                _rigidbody.AddRelativeForce(Vector3.right * upForce * Mathf.Abs(Mathf.Sin(_rigidbody.rotation.eulerAngles.z * Mathf.PI / 180))
+                * Input.GetAxis("Horizontal"));
+                _rigidbody.AddRelativeTorque(Vector3.right * Tor);
+                if (Input.GetAxis("Horizontal") >= 0)
+                {
+                    currentZRotation = Mathf.SmoothDamp(currentZRotation, -tiltAmount, ref tiltVelocitySwerve, 1f);
+                }
+                else if (Input.GetAxis("Horizontal") < 0)
+                {
+                    currentZRotation = Mathf.SmoothDamp(currentZRotation, tiltAmount, ref tiltVelocitySwerve, 1f);
+                }
 
-		}
+            }
+        }else{
+            if (hor != 0)
+            {
+                Tor = (1f / (2 * Mathf.PI)) * powerCoefficient * airDensity
+                    * Mathf.Pow(rotationXVelocity, 2) * Mathf.Pow(propellerDiameter, 5) * Fup;
+                _rigidbody.AddRelativeForce(Vector3.right * upForce * Mathf.Abs(Mathf.Sin(_rigidbody.rotation.eulerAngles.z * Mathf.PI / 180))
+                * hor);
+                _rigidbody.AddRelativeTorque(Vector3.right * Tor);
+                if (hor >= 0)
+                {
+                    currentZRotation = Mathf.SmoothDamp(currentZRotation, -tiltAmount, ref tiltVelocitySwerve, 1f);
+                }
+                else if (hor < 0)
+                {
+                    
+                    currentZRotation = Mathf.SmoothDamp(currentZRotation, tiltAmount, ref tiltVelocitySwerve, 1f);
+                }
+
+            }
+        }
 	}
-	void Rotation(){
+    public void Rotation(float rota = 0,float ver = 0, float hor = 0, float Fup = 0){
 
-		if (Input.GetAxis ("Rotation") != 0) {
-			if (upForce <= 40) {
-				upForce = thrustCoefficient * airDensity * Mathf.Pow (propellerVelocity, 2)
-					* Mathf.Pow (propellerDiameter, 4) * HoverControlInput();
-				
-				curRPM = maxRPM * Mathf.Abs(Input.GetAxis ("Rotation"))*HoverControlInput();
-					 
-					
-			}
+        if(!MLAgent){
+            if (Input.GetAxis("Rotation") != 0)
+            {
+                if (upForce <= 40)
+                {
+                    upForce = thrustCoefficient * airDensity * Mathf.Pow(propellerVelocity, 2)
+                        * Mathf.Pow(propellerDiameter, 4) * HoverControlInput();
 
-			YRotation += rotationAmount * Input.GetAxis ("Rotation") ;
-			
-		}
-		currentYRotation = Mathf.SmoothDamp (currentYRotation, YRotation, ref rotationYVelocity, 1f);
+                    curRPM = maxRPM * Mathf.Abs(Input.GetAxis("Rotation")) * HoverControlInput();
+
+
+                }
+
+                YRotation += rotationAmount * Input.GetAxis("Rotation");
+
+            }
+            currentYRotation = Mathf.SmoothDamp(currentYRotation, YRotation, ref rotationVelocity, 1f);
+        }else{
+            if (rota != 0)
+            {
+                if (upForce <= 40)
+                {
+                    upForce = thrustCoefficient * airDensity * Mathf.Pow(propellerVelocity, 2)
+                        * Mathf.Pow(propellerDiameter, 4) * HoverControlInput();
+
+                    curRPM = maxRPM * Mathf.Abs(rota) * HoverControlInput();
+
+
+                }
+
+                YRotation += rotationAmount * rota;
+
+
+            }
+            currentYRotation = Mathf.SmoothDamp(currentYRotation, YRotation, ref rotationVelocity, 1f);
+        }
+		
 
 	}
 	void updateEnvironmentForce(){
@@ -250,18 +380,15 @@ public class DroneMove : MonoBehaviour {
 	}
 
 	void updateAngularDrag(){
-		_rigidbody.angularDrag = (Mathf.PI * AngularDragCoefficient / 5f) * airDensity
-			* Mathf.Pow (rotationYVelocity, 2) * Mathf.Pow (((DroneWedth / 2f) + (DroneLength / 2f)) / 2f, 5)+
-			(Mathf.PI * AngularDragCoefficient / 5f) * airDensity
-			* Mathf.Pow (rotationZVelocity, 2) * Mathf.Pow (((DroneWedth / 2f) + (DroneLength / 2f)) / 2f, 5)+
-			(Mathf.PI * AngularDragCoefficient / 5f) * airDensity
-			* Mathf.Pow (rotationXVelocity, 2) * Mathf.Pow (((DroneWedth / 2f) + (DroneLength / 2f)) / 2f, 5);
+        _rigidbody.angularDrag = (Mathf.PI * AngularDragCoefficient / 5f) * airDensity
+            * Mathf.Pow(rotationYVelocity, 2) * Mathf.Pow(((DroneWedth / 2f) + (DroneLength / 2f)) / 2f, 5);
 		AngularDrag = _rigidbody.angularDrag;
 	}
 	void updateAngularAcceleration(){
-		float TorNet = Tor + (propellerDiameter/2) * upForce/4 - _rigidbody.angularDrag;
+		float TorNet = Tor + (propellerDiameter/2) * upForce/4;
 		AngularAcceleration = TorNet / _constval.GetMomentInertia ();
 		rotationAmount = AngularAcceleration * Time.deltaTime;
+        //print(_rigidbody.angularDrag);
 	}
 	void updateSpeedInfo(){
 		_rigidbody.mass = droneWeight;
@@ -289,13 +416,19 @@ public class DroneMove : MonoBehaviour {
 		} else if(vibrationZ < -180){
 			vibrationZ += 360;
 		}
+
+        if(Mathf.Abs(vibrationY) >180){
+            vibrationY = 0;
+        }
 		rotationXVelocity = vibrationX/Time.deltaTime;
+        rotationYVelocity = vibrationY / Time.deltaTime;
 		rotationZVelocity = vibrationZ/Time.deltaTime;
 
+       
 		oldXRotation = transform.rotation.eulerAngles.x;
 		oldYRotation = transform.rotation.eulerAngles.y;
 		oldZRotation = transform.rotation.eulerAngles.z;
-        print(rotationYVelocity);
+
 	}
 	float HoverControlInput(){
 		return 0.4f;
@@ -306,5 +439,10 @@ public class DroneMove : MonoBehaviour {
 	void OnCollisionExit (Collision col){
 		CurCollision = "";
 	}
-
+    public void SetRotation(float x, float y, float z){
+        currentXRotation = x;
+        YRotation = y;
+        currentYRotation = y;
+        currentZRotation = z;
+    }
 }
