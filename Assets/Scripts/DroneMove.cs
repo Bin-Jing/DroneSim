@@ -9,7 +9,7 @@ public class DroneMove : MonoBehaviour {
 	bool isFlying = false;
 	[HideInInspector]public string CurCollision = "";
 
-	Transform transform;
+	
 
 	float timer;
 	//drone para
@@ -35,7 +35,7 @@ public class DroneMove : MonoBehaviour {
 	float _gravity = 9.81f;
 	public float Lineardrag = 0f;
 	public float AngularDrag = 0f;
-    public bool MLAgent = false;
+    public bool AutoMove = false;
 	[HideInInspector]public float _thrust;
 
 
@@ -80,7 +80,7 @@ public class DroneMove : MonoBehaviour {
 		
 		_constval = GetComponent<ConstValue> ();
 		_rigidbody = GetComponent<Rigidbody>();
-		transform = GetComponent<Transform> ();
+		
 		valueInitialize ();
 		timer = 0;
         currentYRotation = transform.eulerAngles.y;
@@ -134,7 +134,7 @@ public class DroneMove : MonoBehaviour {
 		AngularDragCoefficient = _constval.GetC_AngularDrag ();
 	}
     public void PropellerForce(float ver = 0,float hor = 0,float Fup = 0){
-        if(!MLAgent){
+        if(!AutoMove){
             if ((Mathf.Abs(Input.GetAxis("Vertical")) > 0.2f) || (Mathf.Abs(Input.GetAxis("Horizontal")) > 0.2f))
             {
 
@@ -225,7 +225,7 @@ public class DroneMove : MonoBehaviour {
 	}
     public void MovemenForward(float ver = 0, float hor = 0, float Fup = 0){
 
-        if(!MLAgent){
+        if(!AutoMove){
             if (Input.GetAxis("Vertical") != 0)
             {
                 Tor = (1f / (2 * Mathf.PI)) * powerCoefficient * airDensity
@@ -271,7 +271,7 @@ public class DroneMove : MonoBehaviour {
 		
 	}
     public void Swerve(float ver = 0, float hor = 0, float Fup = 0){
-        if(!MLAgent){
+        if(!AutoMove){
             if (Input.GetAxis("Horizontal") != 0)
             {
                 Tor = (1f / (2 * Mathf.PI)) * powerCoefficient * airDensity
@@ -312,7 +312,7 @@ public class DroneMove : MonoBehaviour {
 	}
     public void Rotation(float rota = 0,float ver = 0, float hor = 0, float Fup = 0){
 
-        if(!MLAgent){
+        if(!AutoMove){
             if (Input.GetAxis("Rotation") != 0)
             {
                 if (upForce <= 40)
