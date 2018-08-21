@@ -10,6 +10,7 @@ TagManager:
   - Target
   - Block
   - Blocks
+  - pit
   layers:
   - Default
   - TransparentFX
@@ -20,7 +21,7 @@ TagManager:
   - 
   - 
   - Target
-  - 
+  - line
   - 
   - 
   - 
@@ -46,4 +47,7 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: line
+    uniqueID: 1451141679
     locked: 0

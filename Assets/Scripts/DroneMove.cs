@@ -77,7 +77,7 @@ public class DroneMove : MonoBehaviour {
 
 	// Use this for initialization
 	void Awake () {
-		
+        AutoMove = false;
 		_constval = GetComponent<ConstValue> ();
 		_rigidbody = GetComponent<Rigidbody>();
 		
@@ -190,7 +190,7 @@ public class DroneMove : MonoBehaviour {
                         * Mathf.Pow(propellerDiameter, 4) * ver;
                     curRPM = Mathf.Abs(maxRPM * ver);
 
-                    tiltAmount = 40;
+                    tiltAmount = 30;
                 }
 
             }
@@ -299,12 +299,13 @@ public class DroneMove : MonoBehaviour {
                 _rigidbody.AddRelativeTorque(Vector3.right * Tor);
                 if (hor >= 0)
                 {
-                    currentZRotation = Mathf.SmoothDamp(currentZRotation, -tiltAmount, ref tiltVelocitySwerve, 1f);
+                    currentZRotation = Mathf.SmoothDamp(currentZRotation, -30, ref tiltVelocitySwerve, 1f);
+
                 }
                 else if (hor < 0)
                 {
                     
-                    currentZRotation = Mathf.SmoothDamp(currentZRotation, tiltAmount, ref tiltVelocitySwerve, 1f);
+                    currentZRotation = Mathf.SmoothDamp(currentZRotation, 30, ref tiltVelocitySwerve, 1f);
                 }
 
             }
@@ -439,10 +440,18 @@ public class DroneMove : MonoBehaviour {
 	void OnCollisionExit (Collision col){
 		CurCollision = "";
 	}
+    //Set DroneAgent start rotation
     public void SetRotation(float x, float y, float z){
         currentXRotation = x;
         YRotation = y;
         currentYRotation = y;
         currentZRotation = z;
+    }
+    Vector3 targetPosotion(float x, float y, float z){
+        Vector3 targetPos = Vector3.zero;
+        targetPos.x = x / (Mathf.Cos(targetPos.z * Mathf.PI / 180.0f) * _constval.GetEarthRadius()) * 180.0f / Mathf.PI;
+        targetPos.z = z / _constval.GetEarthRadius() * 180.0f / Mathf.PI;
+        targetPos.y = y;
+        return targetPos;
     }
 }

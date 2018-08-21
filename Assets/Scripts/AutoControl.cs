@@ -63,12 +63,12 @@ public class AutoControl : MonoBehaviour {
     private void MoveDrone(){
         float distanceToTarget = Vector3.Distance(this.transform.localPosition,Target.transform.localPosition);
         if(Target.transform.position.y > this.transform.position.y){
-            DM.PropellerForce(ver, 0, 1);
+            DM.PropellerForce(0, 0, 0.8f);
         }else if(Target.transform.position.y < this.transform.position.y){
-            DM.PropellerForce(ver, 0, 0.3f);
+            DM.PropellerForce(0, 0, 0.3f);
         }
         if(Mathf.Abs(Target.transform.position.y - this.transform.position.y) < 1 && Mathf.Abs(relativeRotation) < 1){
-            DM.PropellerForce(0.5f, 0, 1);
+            DM.PropellerForce(0.5f);
             DM.MovemenForward(0.5f);
         }
         if(distanceToTarget < 10){
@@ -77,8 +77,15 @@ public class AutoControl : MonoBehaviour {
 
     }
     void brake(){
-        if(_rigidbody.velocity.magnitude > 1){
-            DM.PropellerForce(-1f, 0, 1);
+        if(this.transform.rotation.eulerAngles.x > 0){
+            DM.MovemenForward(-0.1f);
+        }else  if (this.transform.rotation.eulerAngles.x < 0){
+            DM.MovemenForward(0.1f);
+        }else{
+            DM.MovemenForward(0);
+        }
+        if(Mathf.Pow(Mathf.Pow(_rigidbody.velocity.z, 2) + Mathf.Pow(_rigidbody.velocity.x, 2), 0.5f) > 1){
+            DM.PropellerForce(-1f);
             DM.MovemenForward(-1f);
         }else{
             DM.PropellerForce(0, 0, 0);

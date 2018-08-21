@@ -15,6 +15,8 @@ public class DroneAgent : Agent {
     float StartZ;
     float timer = 0f;
 
+    int goalCounter = 0;
+    int counter = 0;
 
 	void Start () {
 		rBody = GetComponent<Rigidbody>();
@@ -126,22 +128,33 @@ public class DroneAgent : Agent {
         float directionY = 0;
         float rotataionY = 0;
 
+
+        //print(DM.MLAgent +" "+ directionZ + " " + directionX);
+
+       
+        float distanceToTarget = Vector3.Distance(this.transform.localPosition, 
+                                                  Target.localPosition);
         rotataionY = vectorAction[0];
         directionY = Mathf.Clamp(vectorAction[2], -1f, 1f);
         directionZ = Mathf.Clamp(vectorAction[1], -1f, 1f);
         //directionX = Mathf.Clamp(vectorAction[0], -1f, 1f);
-        //print(DM.MLAgent +" "+ directionZ + " " + directionX);
+
+       
+        //print(relativeRotation);
+
+
+        if (Target.transform.position.y > this.transform.position.y)
+        {
+            DM.PropellerForce(directionZ, 0, 0.5f);
+        }
+        else if (Target.transform.position.y < this.transform.position.y)
+        {
+            DM.PropellerForce(directionZ, 0, 0.3f);
+        }
         DM.Rotation(rotataionY);
         //DM.Swerve(directionZ, directionX, directionY);
         DM.PropellerForce(directionZ, directionX, directionY);
         DM.MovemenForward(directionZ, directionX, directionY);
-        //gameObject.GetComponent<Rigidbody>().AddRelativeForce(new Vector3(directionZ*100, directionY* 100, directionX* 100));
-        float distanceToTarget = Vector3.Distance(this.transform.localPosition, 
-                                                  Target.localPosition);
-
-
-        //print(relativeRotation);
-		
 
 
         //if(absReRo < previousRotation){
@@ -167,23 +180,31 @@ public class DroneAgent : Agent {
         if (distanceToTarget < previousDistance)
         {
             AddReward(0.001f * Mathf.Pow(Mathf.Pow(rBody.velocity.z, 2) + Mathf.Pow(rBody.velocity.x, 2), 0.5f));
-            //if (2f < previousDistance - distanceToTarget)
-            //{
-            //    AddReward(0.0005f);
-            //}
+            if (5f < previousDistance - distanceToTarget)
+            {
+                AddReward(0.005f);
+            }
 
         }
 
-        AddReward(0.001f*(distanceToTarget - previousDistance));
+        AddReward(0.1f / (distanceToTarget + 1));
 
-        AddReward(-0.001f*timer);
+        if (distanceToTarget > previousDistance)
+        {
+            AddReward(-0.01f * (distanceToTarget - previousDistance + 1));
+        }
 
+        AddReward(-0.0001f*timer);
+
+        if(absReRo > 90){
+            AddReward(-0.001f * absReRo);
+        }
      
         if (this.transform.position.y < 1)
         {
             AddReward(-0.5f);
         }
-       
+
 
 
         //if (absReRo < previousRotation)
@@ -201,15 +222,15 @@ public class DroneAgent : Agent {
 
 
         if (this.transform.position.y < -1.0 ||
-            this.transform.position.y > 100 
+            this.transform.position.y > 1000
             ||
             Mathf.Abs(this.transform.localPosition.z) > planeL||
-            Mathf.Abs(this.transform.localPosition.x) > planeW||
+            Mathf.Abs(this.transform.localPosition.x) > planeW+5||
             this.transform.localPosition.z < -10
            )
 		{
             
-            SetReward(-1f);
+            SetReward(-3f);
             resetTarget();
             timer = 0;
             Done();
@@ -218,7 +239,7 @@ public class DroneAgent : Agent {
         {
             resetTarget();
             timer = 0;
-            SetReward(-1f);
+            SetReward(-3f);
             Done();
 
         }
@@ -227,43 +248,47 @@ public class DroneAgent : Agent {
         previousRotation = absReRo;
         //print(timer);
         //print(GetReward());
-
+        print(counter + " " + goalCounter);
 	}
     void resetTarget(){
         Target.localPosition = new Vector3(Random.value * planeW - 17, Random.value * 50 + 5, planeL-20);
         for (int i = 0; i < Block.Length; i++){          
-            Block[i].localPosition = new Vector3(Random.Range(-30, 30), 0,Random.value * 50 + 20);
+            Block[i].localPosition = new Vector3(Random.Range(-26, 26), 0,Random.value * 50 + 20);
             Block[i].localScale = new Vector3(Random.value * 10 + 3, Random.value * 300, Random.value * 10 + 3);
         }
+        counter += 1;
     }
-	private void OnCollisionEnter(Collision other)
-	{
-        if (other.gameObject.tag == "Block")
-        {
+	//private void OnCollisionEnter(Collision other)
+	//{
+ //       if (other.gameObject.tag == "Block")
+ //       {
 
-            AddReward(-1f);
-            resetTarget();
-            Done();
-            timer = 0;
-        }
-	}
+ //           SetReward(-1f);
+ //           resetTarget();
+ //           Done();
+ //           timer = 0;
+ //       }
+	//}
 	private void OnTriggerEnter(Collider other)
 	{
         if(other.gameObject.tag == "Target"){
-            SetReward(1.0f);
+            SetReward(3.0f);
+            resetTarget();
+            Done();
+            timer = 0;
+            goalCounter += 1;
+
+        }
+        if (other.gameObject.tag == "Block")
+        {
+            
+            SetReward(-3.0f);
+
             resetTarget();
             Done();
             timer = 0;
         }
-        //if (other.gameObject.tag == "Block")
-        //{
-            
-        //    SetReward(-1.0f);
-
-        //    resetTarget();
-        //    Done();
-        //    timer = 0;
-        //}
 	}
+
 
 }

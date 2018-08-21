@@ -11,19 +11,23 @@ public class InfoUI : MonoBehaviour {
 	public Text ConnectText;
 	public Text LinDragText;
 	public Text AngDragText;
+    public Text LonText;
+    public Text LatText;
+    public Text AltText;
 	bool connected = true;
 	DroneMove DM;
 	UdpClient udp;
+    LatLonAlt latLonAlt;
 	void Start(){
 		connected = true;
 		DM = GameObject.FindGameObjectWithTag ("Player").GetComponent<DroneMove> ();
+        latLonAlt = GameObject.FindGameObjectWithTag("System").GetComponent<LatLonAlt>();
 		udp = GameObject.FindGameObjectWithTag ("System").GetComponent<UdpClient> ();
 	}
 		
 	void Update () {
 		SpeedText.text = "Speed : " + DM.curSpeed.ToString("n2") + " m/s";
 		RMPText.text = "RPM : " + DM.curRPM.ToString("n3");
-
 		LinDragText.text = "Drag : " + DM.Lineardrag.ToString("n4");
 		AngDragText.text = "Angular Drag : " + DM.AngularDrag.ToString("n4");
 		CollisionText.text = DM.CurCollision;
@@ -32,7 +36,10 @@ public class InfoUI : MonoBehaviour {
 		} else {
 			ConnectText.text = "Drone State - connect: false";
 		}
-
+        LonText.text = "Longitude:" + latLonAlt.lon;
+        LatText.text = "Latitude:" + latLonAlt.lat;
+        AltText.text = "Altitude:" + latLonAlt.alt.ToString("n3");
+        //print(latLonAlt.lon + " " + latLonAlt.lat + " " + latLonAlt.alt);
 	}
 	public void RestartBtn(){
 		SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);

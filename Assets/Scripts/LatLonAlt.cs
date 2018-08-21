@@ -14,6 +14,8 @@ public class LatLonAlt : MonoBehaviour {
 	[HideInInspector]public double Startlat;
 	[HideInInspector]public double Startlon;
 	[HideInInspector]public double Startalt;
+
+
 	float EARTH_RADIUS;
 	// Use this for initialization
 	void Start () {
@@ -23,7 +25,7 @@ public class LatLonAlt : MonoBehaviour {
 		EARTH_RADIUS = _constval.GetEarthRadius ();
 		lat = 24.988782;
 		lon = 121.572313;
-		alt = 100;
+		alt = 0;
 		Startlat = lat;
 		Startlon = lon;
 		Startalt = alt;
@@ -35,7 +37,11 @@ public class LatLonAlt : MonoBehaviour {
 
 		lon = Startlon+player.transform.position.x / (Math.Cos(lat * Math.PI / 180.0f) * EARTH_RADIUS) * 180.0f / Math.PI;
 		lat = Startlat+player.transform.position.z / EARTH_RADIUS * 180.0f / Math.PI;
-		alt = Startalt-player.transform.position.y;
-		//print (lon.ToString("n6")+ " "+lat.ToString("n6"));
+		alt = Startalt+player.transform.position.y;
+        //print (lon.ToString("n6")+ " "+lat.ToString("n6"));
+
 	}
+
+
+
 }

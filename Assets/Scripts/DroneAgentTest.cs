@@ -6,8 +6,8 @@ using MLAgents;
 public class DroneAgentTest : Agent
 {
     float planeSize = 30f;
-    float planeW = 50;
-    float planeL = 50;
+    float planeW = 100;
+    float planeL = 100;
     private float previousDistance = 110;
     private float previousRotation = 0;
     DroneMove DM;
@@ -15,7 +15,10 @@ public class DroneAgentTest : Agent
     float StartX;
     float StartZ;
     float timer = 0f;
-
+    float t = 0;
+    public WriteLoadJSON dataList;
+    public bool notTraining = false;
+    int tarpos = 0;
 
     void Start()
     {
@@ -142,52 +145,38 @@ public class DroneAgentTest : Agent
         directionZ = Mathf.Clamp(vectorAction[1], -1f, 1f);
         //directionX = Mathf.Clamp(vectorAction[3], -1f, 1f);
         //print(" "+ directionZ + " " + directionX);
-        DM.Rotation(rotataionY);
-        //DM.Swerve(directionZ, directionX, directionY);
-        DM.PropellerForce(directionZ, directionX, directionY);
-        DM.MovemenForward(directionZ, directionX, directionY);
+
         //gameObject.GetComponent<Rigidbody>().AddRelativeForce(new Vector3(directionZ*100, directionY* 100, directionX* 100));
         float distanceToTarget = Vector3.Distance(this.transform.localPosition,
                                                   Target.localPosition);
 
 
         //print(relativeRotation);
-        if (relativeRotation < 0 && Mathf.Abs(relativeRotation) > 1)
+        DM.Rotation(rotataionY);
+
+        DM.PropellerForce(directionZ, directionX, directionY);
+        DM.Swerve(directionZ, directionX, directionY);
+        DM.MovemenForward(directionZ, directionX, directionY);
+        if (relativeRotation < 0 && Mathf.Abs(relativeRotation) > 3)
         {
             DM.Rotation(-0.3f);
         }
-        else if (relativeRotation > 0 && Mathf.Abs(relativeRotation) > 1)
+        else if (relativeRotation > 0 && Mathf.Abs(relativeRotation) > 3)
         {
             DM.Rotation(0.3f);
         }
-        if (Target.transform.position.y > this.transform.position.y)
+        if (Target.transform.position.y > this.transform.position.y && Mathf.Abs(Target.transform.position.y - this.transform.position.y) > 0.3f)
         {
-            DM.PropellerForce(directionZ, 0, 0.8f);
+            DM.PropellerForce(directionZ, 0, 0.6f);
         }
-        else if (Target.transform.position.y < this.transform.position.y)
+        else if (Target.transform.position.y < this.transform.position.y && Mathf.Abs(Target.transform.position.y - this.transform.position.y) > 0.3f)
         {
             DM.PropellerForce(directionZ, 0, 0.3f);
+        }else{
+            DM.PropellerForce(directionZ, 0, 0.412f);
         }
 
 
-        //if(absReRo < previousRotation){
-        //    AddReward(0.01f);
-        //}
-        //if (absReRo < 1)
-        //{
-        //    AddReward(0.1f);
-        //}else if ((relativeRotation < 0 && relativeRotation > -180) || relativeRotation > 180)
-        //{
-        //    if(rotataionY < 0){
-        //        DM.Rotation(rotataionY);
-        //    }
-
-        //}else if((relativeRotation > 0 && relativeRotation < 180) || relativeRotation < -180){
-        //    if (rotataionY > 0)
-        //    {
-        //        DM.Rotation(rotataionY);
-        //    }
-        //}
 
 
         //if (distanceToTarget < previousDistance)
@@ -200,10 +189,10 @@ public class DroneAgentTest : Agent
 
         //}
 
-        //AddReward(0.001f * (distanceToTarget - previousDistance));
+        AddReward(0.01f / (distanceToTarget + 1));
+        //print(distanceToTarget);
 
-        //AddReward(-0.001f * timer);
-
+        AddReward(-0.001f * absReRo);
 
         if (this.transform.position.y < 1)
         {
@@ -211,38 +200,29 @@ public class DroneAgentTest : Agent
         }
 
 
+       AddReward(-0.01f * (distanceToTarget - previousDistance));
 
-        //if (absReRo < previousRotation)
+
+
+
+        //if ((this.transform.position.y < -1.0 ||
+        //    this.transform.position.y > 100
+        //    ||
+        //    Mathf.Abs(this.transform.localPosition.z) > planeL/2 + 5 ||
+        //    Mathf.Abs(this.transform.localPosition.x) > planeW/2 + 5 
+        //   )&& !notTraining)
         //{
-        //    AddReward(0.0001f);
+
+        //    SetReward(-1f);
+        //    resetTarget();
+        //    timer = 0;
+        //    Done();
         //}
-        //if (absReRo > previousRotation)
-        //{
-        //    AddReward(-0.0001f);
-        //}
-
-        //if(distanceToTarget > previousDistance){
-        //    AddReward(-0.003f);
-        //}
-
-
-        if (this.transform.position.y < -1.0 ||
-            this.transform.position.y > 100
-            ||
-            Mathf.Abs(this.transform.localPosition.z) > planeL/2 + 5 ||
-            Mathf.Abs(this.transform.localPosition.x) > planeW/2 + 5 
-           )
-        {
-
-            SetReward(-1f);
-            resetTarget();
-            timer = 0;
-            Done();
-        }
-        //if (timer > 30)
+        //if (t > 35 && !notTraining)
         //{
         //    resetTarget();
         //    timer = 0;
+        //    t = 0;
         //    SetReward(-1f);
         //    Done();
 
@@ -250,42 +230,69 @@ public class DroneAgentTest : Agent
         //print(rBody.velocity);
         previousDistance = distanceToTarget;
         previousRotation = absReRo;
-        print(timer);
+        //print(timer);
         //print(GetReward());
-
+        t += Time.deltaTime;
+        //print(t + " " + distanceToTarget);
     }
     void resetTarget()
     {
-        Target.localPosition = new Vector3(Random.value * planeW - 25, Random.value * 50 + 5, planeL-25);
+        //Target.localPosition = new Vector3(Random.value * 100 - 50, Random.value * 50 + 5,Random.value * 100-50);
         //for (int i = 0; i < Block.Length; i++)
         //{
         //    Block[i].localPosition = new Vector3(Random.Range(-30, 30), 0, Random.value * 50 + 20);
         //    Block[i].localScale = new Vector3(Random.value * 10 + 3, Random.value * 300, Random.value * 10 + 3);
         //}
+        dataList.LoadTargetGPS(tarpos);
+        previousDistance = Vector3.Distance(this.transform.localPosition, Target.localPosition);
     }
-    //private void OnCollisionEnter(Collision other)
-    //{
-    //    if (other.gameObject.tag == "Block")
-    //    {
+	//private void OnCollisionEnter(Collision other)
+	//{
+	//    if (other.gameObject.tag == "Block")
+	//    {
 
-    //        AddReward(-1f);
-    //        resetTarget();
-    //        Done();
-    //        timer = 0;
-    //    }
-    //}
+	//        AddReward(-1f);
+	//        resetTarget();
+	//        Done();
+	//        timer = 0;
+	//    }
+	//}
+	private void OnTriggerEnter(Collider other)
+	{
+        if (other.gameObject.tag == "Target")
+        {
+            resetTarget();
+
+            if(tarpos == dataList.numberOfTar-1){
+                tarpos = 0;
+            }else{
+                tarpos += 1;
+            }
+        }
+	}
 	private void OnTriggerStay(Collider other)
 	{
         if (other.gameObject.tag == "Target")
         {
+            //if (Target.transform.position.y > this.transform.position.y)
+            //{
+            //    DM.PropellerForce(0, 0, 0.5f);
+            //}
+            //else if (Target.transform.position.y < this.transform.position.y)
+            //{
+            //    DM.PropellerForce(0, 0, 0.3f);
+            //}
+            DM.MovemenForward();
+            DM.SetRotation(0, this.transform.rotation.eulerAngles.y, 0);
             AddReward(0.05f);
             timer += Time.deltaTime;
-            if (timer > 3)
-            {
-                AddReward(1.0f);
-                resetTarget();
-                timer = 0;
-            }
+            //if (timer > 5 && !notTraining)
+            //{
+            //    AddReward(1.0f);
+            //    resetTarget();
+            //    timer = 0;
+            //    t = 0;
+            //}
 
         }
 	}
@@ -293,7 +300,7 @@ public class DroneAgentTest : Agent
 	{
         if (other.gameObject.tag == "Target")
         {
-            AddReward(-0.2f);
+            AddReward(-0.1f);
 
         }
 	}
