@@ -27,11 +27,11 @@ public class WriteLoadJSON : MonoBehaviour {
         
         string jsonString = File.ReadAllText(Application.dataPath + "/JSON/waypoint.json");
 
-        ObjectArrayData load = JsonConvert.DeserializeObject<ObjectArrayData>(jsonString);
-        numberOfTar = load.Items.Length;
+        ObjectData[] Items = JsonConvert.DeserializeObject<ObjectData[]>(jsonString);
+        numberOfTar = Items.Length;
         //print(load.Items[i].curLat+" "+ load.Items[i].curLon+" "+ load.Items[i].curAlt);
-        if(i < load.Items.Length)
-            tarGPS.NewGPSToLocal(load.Items[i].curLat, load.Items[i].curLon, load.Items[i].curAlt);
+        if(i < Items.Length)
+            tarGPS.NewGPSToLocal(Items[i].curLat, Items[i].curLon, Items[i].curAlt);
         //print(jsonString);
     }
 	// Update is called once per frame

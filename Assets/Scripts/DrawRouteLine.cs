@@ -6,14 +6,14 @@ public class DrawRouteLine : MonoBehaviour {
     
     LineRenderer lineRenderer;
     List<Vector3> points = new List<Vector3>();
-    GameObject player;
+    public GameObject player;
 
     DroneAgent DA;
     //public Action<IEnumerable<Vector3>> OnVewPathCreated = delegate;
     private void Awake()
     {
         lineRenderer = GetComponent<LineRenderer>();
-        player = GameObject.FindWithTag("Player");
+        //player = GameObject.FindWithTag("Player");
         DA = player.gameObject.GetComponent<DroneAgent>();
     }
 	private void Update()

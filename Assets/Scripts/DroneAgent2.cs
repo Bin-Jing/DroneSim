@@ -17,6 +17,7 @@ public class DroneAgent2 : Agent {
     int goalCounter = 0;
     int counter = 0;
     float t = 0;
+    float TotalTime = 0;
 	void Start () {
 		rBody = GetComponent<Rigidbody>();
         DM = this.gameObject.GetComponent<DroneMove>();
@@ -154,14 +155,14 @@ public class DroneAgent2 : Agent {
         //{
         //    DM.Rotation(0.1f);
         //}
-        if (Target.transform.position.y > this.transform.position.y)
-        {
-            DM.PropellerForce(directionZ, 0, 0.5f);
-        }
-        else if (Target.transform.position.y < this.transform.position.y)
-        {
-            DM.PropellerForce(directionZ, 0, 0.3f);
-        }
+        //if (Target.transform.position.y > this.transform.position.y)
+        //{
+        //    DM.PropellerForce(directionZ, 0, 0.5f);
+        //}
+        //else if (Target.transform.position.y < this.transform.position.y)
+        //{
+        //    DM.PropellerForce(directionZ, 0, 0.3f);
+        //}
         //print(DM.AutoMove + " " + directionZ + " " + directionX);
         DM.Rotation(rotataionY);
 
@@ -202,7 +203,7 @@ public class DroneAgent2 : Agent {
             AddReward(-0.01f * (this.transform.position.y - 200 + 1));
         }
 
-        AddReward(0.1f / (distanceToTarget + 1));
+        AddReward(0.01f / (distanceToTarget + 1));
 
         //if(distanceToTarget > previousDistance){
         //    AddReward(-0.1f * (distanceToTarget - previousDistance));
@@ -237,36 +238,36 @@ public class DroneAgent2 : Agent {
         //}
 
 
-        if (this.transform.position.y < -1.0 ||
-            this.transform.position.y > 200
-            ||
-            Mathf.Abs(this.transform.localPosition.z) > planeL||
-            Mathf.Abs(this.transform.localPosition.x) > planeW+5||
-            this.transform.localPosition.z < -10
-           )
-		{
+  //      if (this.transform.position.y < -1.0 ||
+  //          this.transform.position.y > 200
+  //          ||
+  //          Mathf.Abs(this.transform.localPosition.z) > planeL||
+  //          Mathf.Abs(this.transform.localPosition.x) > planeW+5||
+  //          this.transform.localPosition.z < -10
+  //         )
+		//{
             
-            SetReward(-3f);
-            resetTarget();
-            timer = 0;
-            t = 0;
-            Done();
-		}
-        if (timer > 35)
-        {
-            resetTarget();
-            timer = 0;
-            t = 0;
-            SetReward(-3f);
-            Done();
+  //          SetReward(-5f);
+  //          resetTarget();
+  //          timer = 0;
+  //          t = 0;
+  //          Done();
+		//}
+        //if (timer > 60)
+        //{
+        //    resetTarget();
+        //    timer = 0;
+        //    t = 0;
+        //    SetReward(-3f);
+        //    Done();
 
-        }
+        //}
         //print(rBody.velocity);
 		previousDistance = distanceToTarget;
         previousRotation = absReRo;
         //print(timer);
         //print(GetReward());
-        print(counter + " " + goalCounter);
+        print(counter + " " + goalCounter + " " + TotalTime);
 	}
     void resetTarget(){
         Target.localPosition = new Vector3(Random.value * planeW - 17, Random.value * 50 + 5, planeL-20);
@@ -277,6 +278,8 @@ public class DroneAgent2 : Agent {
         }
         previousDistance = Vector3.Distance(this.transform.localPosition,Target.localPosition);
         counter += 1;
+        TotalTime += timer;
+
     }
 	//private void OnCollisionEnter(Collision other)
 	//{
@@ -299,7 +302,7 @@ public class DroneAgent2 : Agent {
                 t += Time.deltaTime;
                 AddReward(0.01f*t);
 
-                if (t > 5)
+                if (t > 50000)
                 {
                     SetReward(3.0f);
                     resetTarget();
@@ -318,7 +321,7 @@ public class DroneAgent2 : Agent {
         if (other.gameObject.tag == "Block")
         {
             
-            SetReward(-3.0f);
+            SetReward(-5.0f);
 
             resetTarget();
             Done();
@@ -330,7 +333,7 @@ public class DroneAgent2 : Agent {
     {
         if (other.gameObject.tag == "Target")
         {
-            AddReward(-0.1f);
+            AddReward(-0.2f);
 
         }
     }
