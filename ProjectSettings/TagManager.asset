@@ -11,6 +11,7 @@ TagManager:
   - Block
   - Blocks
   - pit
+  - goal
   layers:
   - Default
   - TransparentFX
