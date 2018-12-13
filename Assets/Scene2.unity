@@ -509,8 +509,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a15b6831f785e436f808b8d0eacf2828, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lineMaterial: {fileID: 2100000, guid: 1e0798513d26b40a7ae0f483718ba167, type: 2}
-  t2: {fileID: 1644468919}
 --- !u!135 &192530928
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -2492,8 +2490,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a15b6831f785e436f808b8d0eacf2828, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lineMaterial: {fileID: 2100000, guid: 1e0798513d26b40a7ae0f483718ba167, type: 2}
-  t2: {fileID: 1311348412}
 --- !u!135 &659462816
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -3153,6 +3149,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52ab8b47d4e5d40aab98d0e2fa63f8b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tar: {fileID: 0}
 --- !u!20 &826874677
 Camera:
   m_ObjectHideFlags: 0
@@ -3320,6 +3317,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ac3b030166d8497a91ed5bb37c00380, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ca: {fileID: 0}
 --- !u!81 &872857950
 AudioListener:
   m_ObjectHideFlags: 0
@@ -3522,8 +3520,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a15b6831f785e436f808b8d0eacf2828, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lineMaterial: {fileID: 2100000, guid: 1e0798513d26b40a7ae0f483718ba167, type: 2}
-  t2: {fileID: 192530931}
 --- !u!135 &906130043
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -4243,8 +4239,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a15b6831f785e436f808b8d0eacf2828, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lineMaterial: {fileID: 2100000, guid: 1e0798513d26b40a7ae0f483718ba167, type: 2}
-  t2: {fileID: 1147748485}
 --- !u!1 &1040219364
 GameObject:
   m_ObjectHideFlags: 0
@@ -4599,8 +4593,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a15b6831f785e436f808b8d0eacf2828, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lineMaterial: {fileID: 2100000, guid: 1e0798513d26b40a7ae0f483718ba167, type: 2}
-  t2: {fileID: 906130046}
 --- !u!135 &1147748482
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -5757,8 +5749,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a15b6831f785e436f808b8d0eacf2828, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lineMaterial: {fileID: 2100000, guid: 1e0798513d26b40a7ae0f483718ba167, type: 2}
-  t2: {fileID: 659462819}
 --- !u!135 &1644468916
 SphereCollider:
   m_ObjectHideFlags: 0
