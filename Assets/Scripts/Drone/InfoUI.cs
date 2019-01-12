@@ -21,8 +21,8 @@ public class InfoUI : MonoBehaviour {
 	void Start(){
 		connected = true;
 		DM = GameObject.FindGameObjectWithTag ("Player").GetComponent<DroneMove> ();
-        latLonAlt = GameObject.FindGameObjectWithTag("System").GetComponent<LatLonAlt>();
-		udp = GameObject.FindGameObjectWithTag ("System").GetComponent<UdpClient> ();
+        //latLonAlt = GameObject.FindGameObjectWithTag("System").GetComponent<LatLonAlt>();
+		//udp = GameObject.FindGameObjectWithTag ("System").GetComponent<UdpClient> ();
 	}
 		
 	void Update () {
@@ -32,13 +32,14 @@ public class InfoUI : MonoBehaviour {
 		AngDragText.text = "Angular Drag : " + DM.AngularDrag.ToString("n4");
 		CollisionText.text = DM.CurCollision;
 		if (connected) {
-			ConnectText.text = "Drone State - connect: " + udp.ConnectString;
+			//ConnectText.text = "Drone State - connect: " + udp.ConnectString;
+            //LonText.text = "Longitude:" + latLonAlt.lon;
+            //LatText.text = "Latitude:" + latLonAlt.lat;
+            //AltText.text = "Altitude:" + latLonAlt.alt.ToString("n3");
 		} else {
 			ConnectText.text = "Drone State - connect: false";
 		}
-        LonText.text = "Longitude:" + latLonAlt.lon;
-        LatText.text = "Latitude:" + latLonAlt.lat;
-        AltText.text = "Altitude:" + latLonAlt.alt.ToString("n3");
+       
         //print(latLonAlt.lon + " " + latLonAlt.lat + " " + latLonAlt.alt);
 	}
 	public void RestartBtn(){

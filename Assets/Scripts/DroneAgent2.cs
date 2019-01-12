@@ -22,6 +22,7 @@ public class DroneAgent2 : Agent {
     float minRo = 180;
     int failcount = 0;
     int collcount = 0;
+    int goalcount = 0;
 	void Start () {
 		rBody = GetComponent<Rigidbody>();
         DM = this.gameObject.GetComponent<DroneMove>();
@@ -233,21 +234,21 @@ public class DroneAgent2 : Agent {
         //}
 
 
-        if (this.transform.position.y < -3.0 ||
-            this.transform.position.y > 60
-            ||
-            Mathf.Abs(this.transform.localPosition.z) > 180||
-            Mathf.Abs(this.transform.localPosition.x) > 180
-           )
-		{
+  //      if (this.transform.position.y < -3.0 ||
+  //          this.transform.position.y > 60
+  //          ||
+  //          Mathf.Abs(this.transform.localPosition.z) > 180||
+  //          Mathf.Abs(this.transform.localPosition.x) > 180
+  //         )
+		//{
             
-            SetReward(-60f);
-            //resetTarget();
-            timer = 0;
-            t = 0;
-            Done();
+  //          SetReward(-60f);
+  //          //resetTarget();
+  //          timer = 0;
+  //          t = 0;
+  //          Done();
 
-		}
+		//}
         //if (timer > 30+failcount * 2)
         //{
         //    AddReward(-40f);
@@ -286,38 +287,38 @@ public class DroneAgent2 : Agent {
         int yy = Random.Range(0, 3);
         //Target.localPosition = new Vector3(Random.Range(-50, 50), Random.Range(1, 30), Random.Range(-50, -30));
         //Target.localPosition = new Vector3(Random.Range(-80, 80), Random.Range(1, 30), Random.Range(40, 110));
-        if (xx % 2 == 0)
-        {
-            Target.localPosition = new Vector3(Random.Range(-80, 80), Random.Range(1, 30), Random.Range(40, 110));
-        }
-        else
-        {
-            Target.localPosition = new Vector3(Random.Range(-80, 80), Random.Range(1, 30), Random.Range(-110, -40));
-        }
+        //if (xx % 2 == 0)
+        //{
+        Target.localPosition = new Vector3(Random.Range(-50, 50), Random.Range(20, 30)+goalcount*5, Random.Range(80, 110) + goalcount*100);
+        //}
+        //else
+        //{
+        //    Target.localPosition = new Vector3(Random.Range(-80, 80), Random.Range(1, 30), Random.Range(-110, -80));
+        //}
 
         for (int i = 0; i < Block.Length; i++)
         {
             //Block[i].localScale = new Vector3(Random.value * 10 + 3, Random.value * 300, Random.value * 10 + 3);
-            if (i % 2 == 0)
-            {
-                Block[i].localPosition = new Vector3(Random.Range(-80, 80), 0, Random.Range(30, 100));
-            }
-            else
-            {
-                Block[i].localPosition = new Vector3(Random.Range(-80, 80), 0, Random.Range(-100, -30));
-            }
-
-            //Block[i].rotation = Quaternion.Euler(new Vector3(0, Random.value * 360, 0));
-            //if((i == 18 || i == 19 || i == 20 || i == 21) && yy % 2 != 0){
+            //if (xx % 2 == 0)
+            //{
+            Block[i].localPosition = new Vector3(Random.Range(-50, 50), -4, Random.Range(50, 110)+ goalcount * 100);
+            //}
+            //else
+            //{
+            //    Block[i].localPosition = new Vector3(Random.Range(-80, 80), 0, Random.Range(-100, -30));
+            //}
+   
+                Block[i].rotation = Quaternion.Euler(new Vector3(0, Random.value * 360, 0));
+            //if((i == 18 || i == 19 || i == 20 || i == 21) ){
             //    if (i == 18)
             //    {
             //        Block[i].localPosition = new Vector3(Target.localPosition.x, 0, Target.localPosition.z - 15);
             //    }
             //    else
-            //    if(i == 19){
+            //    if(i == 19&& yy % 2 != 0){
             //        Block[i].localPosition = new Vector3(Target.localPosition.x - 15, 0, Target.localPosition.z);
             //    }else
-            //    if (i == 20)
+            //    if (i == 20&& yy % 2 != 0)
             //    {
             //        Block[i].localPosition = new Vector3(Target.localPosition.x + 15, 0, Target.localPosition.z);
             //        }else
@@ -340,10 +341,10 @@ public class DroneAgent2 : Agent {
         {
 
             AddReward(-40f);
-            resetTarget();
-            Done();
-            timer = 0;
-            collcount += 1;
+            //resetTarget();
+            //Done();
+            //timer = 0;
+            //collcount += 1;
         }
         if (other.gameObject.tag == "Ground")
         {
@@ -361,11 +362,11 @@ public class DroneAgent2 : Agent {
                 t += Time.deltaTime;
                 AddReward(1f*t);
 
-                if (t > 5)
-                {
+                //if (t > 5)
+                //{
                     AddReward(150.0f-failcount*2);
-                    resetTarget();
-                    Done();
+                    //resetTarget();
+                    //Done();
                     TotalTime += timer;
                     timer = 0;
                     t = 0;
@@ -373,14 +374,16 @@ public class DroneAgent2 : Agent {
                     //counter += 1;
                     goalCounter += 1;
 
-                }
+                //}
 
             }
         }
     }
 	private void OnTriggerEnter(Collider other)
 	{
-       
+        if(other.gameObject.tag == "Target"){
+            forDemo();
+        }
         //if (other.gameObject.tag == "Block")
         //{
             
@@ -403,5 +406,13 @@ public class DroneAgent2 : Agent {
             //AddReward(-0.6f);
 
         }
+    }
+    void forDemo(){
+        goalcount += 1;
+        if(goalcount > 5){
+            Done();
+            goalcount = 0;
+        }
+        resetTarget();
     }
 }
