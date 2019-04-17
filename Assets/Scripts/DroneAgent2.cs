@@ -4,9 +4,6 @@ using UnityEngine;
 using MLAgents;
 //curruculum
 public class DroneAgent2 : Agent {
-	float planeSize = 30f;
-    float planeW = 40;
-    float planeL = 110;
 	private float previousDistance = 110;
     private float previousRotation = 0;
     DroneMove DM;
@@ -39,7 +36,7 @@ public class DroneAgent2 : Agent {
 	public override void AgentReset()
 	{
         this.transform.localPosition = new Vector3(StartX, 7f, StartZ);
-        DM.SetRotation(0, Random.value * 360, 0);
+        DM.SetRotation(0, Random.value * 0, 0);
         this.rBody.angularVelocity = Vector3.zero;
         this.rBody.velocity = Vector3.zero;
         previousDistance = 110;
@@ -98,19 +95,7 @@ public class DroneAgent2 : Agent {
         AddVectorObs(velocity.z/15);
         AddVectorObs(Rotation);
         AddVectorObs(relativeRotation);
-        //for (int i = 0; i < Block.Length; i++)
-        //{
-        //    AddVectorObs(Block[i].localPosition.x/200);
-        //    AddVectorObs(Block[i].localPosition.y/200);
-        //    AddVectorObs(Block[i].localPosition.z/200);
-        //    AddVectorObs(Block[i].localScale.x/200);
-        //    AddVectorObs(Block[i].localScale.y/200);
-        //    AddVectorObs(Block[i].localScale.z/200);
-        //}
-        //print(relativeRotation + " " + ((relativeRotation+1)*180));
-        //AddVectorObs(DM.rotationXVelocity/10);
-        //AddVectorObs(DM.rotationYVelocity/10);
-        //AddVectorObs(DM.rotationZVelocity/10);
+
 	}
 	public override void AgentAction(float[] vectorAction, string textAction)
 	{
@@ -191,9 +176,6 @@ public class DroneAgent2 : Agent {
 
         AddReward(0.1f / (distanceToTarget + 1));
 
-        //if(distanceToTarget > previousDistance){
-        //    AddReward(-0.1f * (distanceToTarget - previousDistance));
-        //}
         AddReward(0.0001f * (mindis - distanceToTarget));
         if(distanceToTarget < mindis){
             mindis = distanceToTarget;
@@ -207,17 +189,9 @@ public class DroneAgent2 : Agent {
             AddReward(-0.7f);
         }
 
-        //AddReward(-0.01f * (distanceToTarget - previousDistance));
 
 
         AddReward(-0.0001f*timer);
-
-        //if(absReRo > 90){
-        //    AddReward(-0.001f * absReRo);
-        //}
-     
-
-
 
 
         //if (absReRo < previousRotation)
@@ -289,7 +263,7 @@ public class DroneAgent2 : Agent {
         //Target.localPosition = new Vector3(Random.Range(-80, 80), Random.Range(1, 30), Random.Range(40, 110));
         //if (xx % 2 == 0)
         //{
-        Target.localPosition = new Vector3(Random.Range(-50, 50), Random.Range(20, 30)+goalcount*5, Random.Range(80, 110) + goalcount*100);
+        Target.localPosition = new Vector3(Random.Range(-80, 80), Random.Range(20, 30), Random.Range(50, 100));
         //}
         //else
         //{
@@ -301,14 +275,13 @@ public class DroneAgent2 : Agent {
             //Block[i].localScale = new Vector3(Random.value * 10 + 3, Random.value * 300, Random.value * 10 + 3);
             //if (xx % 2 == 0)
             //{
-            Block[i].localPosition = new Vector3(Random.Range(-50, 50), -4, Random.Range(50, 110)+ goalcount * 100);
+            Block[i].localPosition = new Vector3(Random.Range(-80, 80), -4, Random.Range(30, 100));
             //}
             //else
             //{
             //    Block[i].localPosition = new Vector3(Random.Range(-80, 80), 0, Random.Range(-100, -30));
             //}
-   
-                Block[i].rotation = Quaternion.Euler(new Vector3(0, Random.value * 360, 0));
+            Block[i].rotation = Quaternion.Euler(new Vector3(0, Random.value * 360, 0));
             //if((i == 18 || i == 19 || i == 20 || i == 21) ){
             //    if (i == 18)
             //    {
@@ -341,10 +314,10 @@ public class DroneAgent2 : Agent {
         {
 
             AddReward(-40f);
-            //resetTarget();
-            //Done();
+            resetTarget();
+            Done();
             //timer = 0;
-            //collcount += 1;
+            collcount += 1;
         }
         if (other.gameObject.tag == "Ground")
         {
@@ -365,8 +338,8 @@ public class DroneAgent2 : Agent {
                 //if (t > 5)
                 //{
                     AddReward(150.0f-failcount*2);
-                    //resetTarget();
-                    //Done();
+                    resetTarget();
+                    Done();
                     TotalTime += timer;
                     timer = 0;
                     t = 0;

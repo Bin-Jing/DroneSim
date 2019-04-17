@@ -173,11 +173,14 @@ public class DroneMove : MonoBehaviour {
                 curRPM = Mathf.Abs(maxRPM * Input.GetAxis("FlyUp"));
 
             }
+            else {
+                upForce = Mathf.SmoothDamp(upForce, 0, ref refForce, 50f);
+            }
 
             if (Input.GetAxis("FlyUp") == 0 && Input.GetAxis("Vertical") == 0 && Input.GetAxis("Horizontal") == 0)
             {
 
-                upForce = Mathf.SmoothDamp(upForce, 0, ref refForce, 1f);
+                upForce = Mathf.SmoothDamp(upForce, 0, ref refForce, 50f);
                 curRPM = Mathf.SmoothDamp(curRPM, 0, ref refRPM, 1 / Mathf.Pow(2, 0.5f));
             }
         }else{
@@ -212,11 +215,15 @@ public class DroneMove : MonoBehaviour {
                 curRPM = Mathf.Abs(maxRPM * Fup);
 
             }
+            else
+            {
+                upForce = Mathf.SmoothDamp(upForce, 0, ref refForce, 50f);
+            }
 
             if (Fup == 0 && ver == 0 && hor == 0)
             {
 
-                upForce = Mathf.SmoothDamp(upForce, 0, ref refForce, 1f);
+                upForce = Mathf.SmoothDamp(upForce, 0, ref refForce, 50f);
                 curRPM = Mathf.SmoothDamp(curRPM, 0, ref refRPM, 1 / Mathf.Pow(2, 0.5f));
             }
         }
