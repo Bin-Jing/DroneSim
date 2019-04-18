@@ -2,13 +2,13 @@
 # DroneSim
 
 # 安裝流程：
-git clone https://github.com/Bin-Jing/DroneSim.git
-Download unity [tensorflowsharp](https://s3.amazonaws.com/unity-ml-agents/0.5/TFSharpPlugin.unitypackage)
-Download [ml-agent 5.0a](https://github.com/Unity-Technologies/ml-agents/releases/tag/0.5.0a)
+- git clone https://github.com/Bin-Jing/DroneSim.git
+- Download unity [tensorflowsharp](https://s3.amazonaws.com/unity-ml-agents/0.5/TFSharpPlugin.unitypackage)
+- Download [ml-agent 5.0a](https://github.com/Unity-Technologies/ml-agents/releases/tag/0.5.0a)
 
-Open unity and open DroneSim project
-Open and install tensorflow sharp
-Copy ml-agents5.0a/UnitySDK/Assets/ML-Agents to DroneSim project Assets
+- Open unity and open DroneSim project
+- Open and install tensorflow sharp
+- Copy ml-agents5.0a/UnitySDK/Assets/ML-Agents to DroneSim project Assets
 
 註：7.0版本已經包含了 tensorflowsharp 所以可能以後會載不到
 建議升級版本
@@ -89,12 +89,35 @@ directionX = Mathf.Clamp(vectorAction[3], -1f, 1f);
 
 mlagents-learn <trainer-config-file> --env=<env_name> --run-id=<run-identifier> --train
 
-<trainer-config-file>為training_config檔案放置位置
---env= unity build出來的執行檔位置
---run-id 為這次訓練的名稱
---train 為訓練
+- <trainer-config-file>為training_config檔案放置位置
+- --env= unity build出來的執行檔位置
+- --run-id 為這次訓練的名稱
+- --train 為訓練
 若之前有訓練了就使用—load來load之前訓練的模型，--run-id要和之前訓練的模型相同
 
 註：版本必須為5.0a才能跑，不然就需要升級這個project ml-agents版本
 
-
+# Training Config 參數
+~~~
+    trainer: ppo
+    batch_size: 1024 
+    beta: 1.0e-2
+    buffer_size: 10240 
+    epsilon: 0.2
+    gamma: 0.99
+    hidden_units: 128 
+    lambd: 0.99 
+    learning_rate: 3.0e-4
+    max_steps: 300.0e5
+    memory_size: 256
+    normalize: true #false
+    num_epoch: 3
+    num_layers: 2 
+    time_horizon: 64
+    sequence_length: 32
+    summary_freq: 10000
+    use_recurrent: true
+    use_curiosity: false
+    curiosity_strength: 0.01
+    curiosity_enc_size: 256 
+~~~
