@@ -10331,8 +10331,8 @@ GameObject:
   m_Component:
   - component: {fileID: 899588149}
   - component: {fileID: 899588148}
-  - component: {fileID: 899588147}
   - component: {fileID: 899588146}
+  - component: {fileID: 899588147}
   - component: {fileID: 899588145}
   m_Layer: 0
   m_Name: Drone
@@ -10363,19 +10363,31 @@ MonoBehaviour:
     numberOfActionsBetweenDecisions: 5
   Target: {fileID: 1436108972}
   Block:
-  - {fileID: 220970886}
-  - {fileID: 97089145}
-  - {fileID: 1063769172}
-  - {fileID: 1128718704}
-  - {fileID: 615881704}
-  - {fileID: 1184862567}
-  - {fileID: 517754917}
-  - {fileID: 1497877109}
-  - {fileID: 639142425}
-  - {fileID: 1993722321}
-  - {fileID: 1819637030}
-  - {fileID: 1246145756}
-  - {fileID: 706691139}
+  - {fileID: 1541461393}
+  - {fileID: 2034896300}
+  - {fileID: 873830509}
+  - {fileID: 1199198703}
+  - {fileID: 740940713}
+  - {fileID: 2026456323}
+  - {fileID: 1862945353}
+  - {fileID: 893155586}
+  - {fileID: 1036910441}
+  - {fileID: 227861257}
+  - {fileID: 395628077}
+  - {fileID: 1037729984}
+  - {fileID: 532616326}
+  - {fileID: 1230313073}
+  - {fileID: 1169584482}
+  - {fileID: 570470795}
+  - {fileID: 1697037903}
+  - {fileID: 576119755}
+  - {fileID: 536784552}
+  - {fileID: 272122120}
+  - {fileID: 1190661490}
+  - {fileID: 2059161370}
+  - {fileID: 1910992060}
+  - {fileID: 774385741}
+  - {fileID: 1550955089}
 --- !u!114 &899588146
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12146,7 +12158,7 @@ MonoBehaviour:
     - 
     - 
     vectorActionSpaceType: 1
-  brainType: 3
+  brainType: 0
   CoreBrains:
   - {fileID: 1866129810}
   - {fileID: 1686152578}
