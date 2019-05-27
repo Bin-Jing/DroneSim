@@ -1,107 +1,131 @@
-<img src="docs/images/unity-wide.png" align="middle" width="3000"/>
+﻿
+# DroneSim
 
-<img src="docs/images/image-banner.png" align="middle" width="3000"/>
+# 安裝流程：
+- git clone https://github.com/Bin-Jing/DroneSim.git
+- Download unity [tensorflowsharp](https://s3.amazonaws.com/unity-ml-agents/0.5/TFSharpPlugin.unitypackage)
+- Download [ml-agent 5.0a](https://github.com/Unity-Technologies/ml-agents/releases/tag/0.5.0a)
 
-# Unity ML-Agents Toolkit (Beta)
+- Open unity and open DroneSim project
+- Open and install tensorflow sharp
+- Copy ml-agents5.0a/UnitySDK/Assets/ML-Agents to DroneSim project Assets
 
-**The Unity Machine Learning Agents Toolkit** (ML-Agents) is an open-source
-Unity plugin that enables games and simulations to serve as environments for
-training intelligent agents. Agents can be trained using reinforcement learning,
-imitation learning, neuroevolution, or other machine learning methods through a
-simple-to-use Python API. We also provide implementations (based on TensorFlow)
-of state-of-the-art algorithms to enable game developers and hobbyists to easily
-train intelligent agents for 2D, 3D and VR/AR games. These trained agents can be
-used for multiple purposes, including controlling NPC behavior (in a variety of
-settings such as multi-agent and adversarial), automated testing of game builds
-and evaluating different game design decisions pre-release. The ML-Agents
-toolkit is mutually beneficial for both game developers and AI researchers as it
-provides a central platform where advances in AI can be evaluated on Unity’s
-rich environments and then made accessible to the wider research and game
-developer communities.
+註：7.0版本已經包含了 tensorflowsharp 所以可能以後會載不到
+建議升級版本
+# DroneMove
+![](https://i.imgur.com/SoUKe6f.png)
 
-## Features
+這個Script是用來控制無人機物理和如何飛行的
+constValue是用來設定一些定值計算物理時使用的
 
-* Unity environment control from Python
-* 10+ sample Unity environments
-* Support for multiple environment configurations and training scenarios
-* Train memory-enhanced agents using deep reinforcement learning
-* Easily definable Curriculum Learning scenarios
-* Broadcasting of agent behavior for supervised learning
-* Built-in support for Imitation Learning
-* Flexible agent control with On Demand Decision Making
-* Visualizing network outputs within the environment
-* Simplified set-up with Docker
-* Wrap learning environments as a gym
+但現在AirSim已經有Unity版本，他的物理模式比我的好，建議可以直接改成使用AirSim
 
-## Documentation
+# ML-Agent使用方式
+![](https://i.imgur.com/17fGPqy.png)
 
-* For more information, in addition to installation and usage instructions, see
-  our [documentation home](docs/Readme.md).
-* If you are a researcher interested in a discussion of Unity as an AI platform, see a pre-print of our [reference paper on Unity and the ML-Agents Toolkit](https://arxiv.org/abs/1809.02627). Also, see below for instructions on citing this paper.
-* If you have used a version of the ML-Agents toolkit prior to v0.5, we strongly
-  recommend our [guide on migrating from earlier versions](docs/Migrating.md).
+接著是ML-Agent使用方式，我所使用的版本為ml-agent5.0版本我看到6.0版本以後使用方式有些不同但我這個還沒改，5.0以後版本詳細看https://github.com/Unity-Technologies/ml-agents/tree/master/docs 教學
 
-## Additional Resources
+## 以下為5.0a版本說明
+建議先看完上面連結的官方教學再來看我寫的內容比較清楚。
+ML-Agent使與時需要三個重要的Script為
 
-We have published a series of blog posts that are relevant for ML-Agents:
+Agent、Brain、Academy
 
-* Overviewing reinforcement learning concepts
-  ([multi-armed bandit](https://blogs.unity3d.com/2017/06/26/unity-ai-themed-blog-entries/)
-  and
-  [Q-learning](https://blogs.unity3d.com/2017/08/22/unity-ai-reinforcement-learning-with-q-learning/))
-* [Using Machine Learning Agents in a real game: a beginner’s guide](https://blogs.unity3d.com/2017/12/11/using-machine-learning-agents-in-a-real-game-a-beginners-guide/)
-* [Post](https://blogs.unity3d.com/2018/02/28/introducing-the-winners-of-the-first-ml-agents-challenge/)
-  announcing the winners of our
-  [first ML-Agents Challenge](https://connect.unity.com/challenges/ml-agents-1)
-* [Post](https://blogs.unity3d.com/2018/01/23/designing-safer-cities-through-simulations/)
-  overviewing how Unity can be leveraged as a simulator to design safer cities.
+- Agent是用來設定RL在訓練時需要觀測到哪些值和RL最後要學到什麼，Agent需要的參數為如上圖，
 
-In addition to our own documentation, here are some additional, relevant articles:
+- Brain這個Script和是否需要用Camera來讓訓練的Agent有影像的觀測，可藉由Add和remove Camera兩個按鈕來新增或減少Camera數量，MaxStep為這個Agent執行多少步行為後他會強制讓這個Agent結束這一輪，設定為0時為不強制重製，Reset On Done指的是當Done時是否要去呼叫AgentReset這個funciton，
+- On Demand Decision是指是否要根據你的命令來影響RL的決策，Decision Frequency是每做幾個Step更新一次RL的決策一定要大於1建議在10以下不然不能收斂。剩下的參數為我定義的，主要用來隨機生成物件。
+- 
+我在DroneAgent2這個Script裡面繼承了Agent然後寫了每次重製時無人機的生成、障礙物隨機生成和目標點的隨機生成，Reward的計算也都寫在裡面
+裡面最主要的function為AgentReset 、CollectObservations 、AgentAction 
+這三個function是我們需要去override ，
+AgentReset是當呼叫到unity給的Done function時他會執行的function也就是每一輪結束時會呼叫的，例如撞到障礙物或到達終點時我會呼叫Done這個function這時他就會呼叫AgentReset，所以可以在AgentReset這個function裡面寫整個環境的初始化。
+CollectObservations是要寫有關RL需要觀測到的Data，所觀測到的Data需要做normalize這樣RL比較好學到東西。
+AgentAction是要寫如何操控這個Agent，我在裡面設定了無人機怎麼動和他動了後得到的reward。
 
-* [Unity AI - Unity 3D Artificial Intelligence](https://www.youtube.com/watch?v=bqsfkGbBU6k)
-* [A Game Developer Learns Machine Learning](https://mikecann.co.uk/machine-learning/a-game-developer-learns-machine-learning-intent/)
-* [Explore Unity Technologies ML-Agents Exclusively on Intel Architecture](https://software.intel.com/en-us/articles/explore-unity-technologies-ml-agents-exclusively-on-intel-architecture)
 
-## Community and Feedback
+# Academy
+![](https://i.imgur.com/2WssQSf.png)
 
-The ML-Agents toolkit is an open-source project and we encourage and welcome
-contributions. If you wish to contribute, be sure to review our
-[contribution guidelines](CONTRIBUTING.md) and
-[code of conduct](CODE_OF_CONDUCT.md).
+本版未以此方法寫curriculum的方式learning 但可以使用這個方法來隨著訓練結果的成長，來增加訓練難度
 
-You can connect with us and the broader community
-through Unity Connect and GitHub:
+- Academy主要設定某些參數在訓練時是否需要修改，如使用curriculum learning時到達某個條件時增加或減低難度
+- MaxStep為每個Agent執行到幾部時強制重製，設定為0時為不強制重製，Training Configuration為訓練時的視窗設定
+- Inference configuration為跑訓練的model時的視窗設定
+- Reset Parameter為設定某些參數在訓練時是否需要修改
 
-* Join our
-  [Unity Machine Learning Channel](https://connect.unity.com/messages/c/035fba4f88400000)
-  to connect with others using the ML-Agents toolkit and Unity developers
-  enthusiastic about machine learning. We use that channel to surface updates
-  regarding the ML-Agents toolkit (and, more broadly, machine learning in
-  games).
-* If you run into any problems using the ML-Agents toolkit,
-  [submit an issue](https://github.com/Unity-Technologies/ml-agents/issues) and
-  make sure to include as much detail as possible.
 
-For any other questions or feedback, connect directly with the ML-Agents
-team at ml-agents@unity3d.com.
+# Brain
+![](https://i.imgur.com/xC3VnRi.png)
 
-## Translations
 
-To make the Unity ML-Agents toolkit accessible to the global research and
-Unity developer communities, we're attempting to create and maintain
-translations of our documentation. We've started with translating a subset
-of the documentation to one language (Chinese), but we hope to continue
-translating more pages and to other languages. Consequently,
-we welcome any enhancements and improvements from the community.
+- Brain為傳給RL的一些參數設定，Vector Observation為Agent裡面CollectObservations這function你所寫的有幾個值要傳給RL當訓練資料的，Stacked Vector為有幾個stack
 
-* [Chinese](docs/localized/zh-CN/)
+- Visual Observation為你在Agent裡面設定了幾個Camera，Width和Height為畫面的長寬Black And White為是否要改為使用黑白圖片
+- Vector Action可設定為Continuous或discrete
+- Space size為6就是上下左右前後
+- Brain Type為Internal時是使用訓練完成的model 將訓練完成的model放到Graph model裡面，Brain Type為External時是要訓練時，
 
-## License
 
-[Apache License 2.0](LICENSE)
 
-## Citation
+- Brain Type為Player時為設定無人機怎麼動的，和Agent的AgentAction有關，我這裡設定為Continuous且Size為4，index為3的是左右移動index為1的是前後移動，index為0的是旋轉，index為2的是上下移動
 
-If you use Unity or the ML-Agents Toolkit to conduct research, we ask that you cite the following paper as a reference:
 
-Juliani, A., Berges, V., Vckay, E., Gao, Y., Henry, H., Mattar, M., Lange, D. (2018). Unity: A General Platform for Intelligent Agents. *arXiv preprint arXiv:1809.02627.* https://github.com/Unity-Technologies/ml-agents.
+因此AgentAction裡面這樣寫:
+
+`
+rotataionY = vectorAction[0];
+directionY = Mathf.Clamp(vectorAction[2], -1f, 1f);
+directionZ = Mathf.Clamp(vectorAction[1], -1f, 1f);
+directionX = Mathf.Clamp(vectorAction[3], -1f, 1f); 
+`
+
+然後就可以將rotataionY 、directionY 、directionZ 、directionX 作為參數帶入DroneMove這個Script讓無人機移動了。
+將來若要改AirSim也是將這些移動帶到AirSim的移動function裡面。
+
+
+# 訓練時輸入：
+
+
+mlagents-learn trainer-config-file --env=<env_name> --run-id=<run-identifier> --train
+
+- ex:
+
+mlagents-learn C:/Users/Archimondes/Desktop/ml-agents-0.5.0a/config/trainer_config.yaml --env=DM/DroneFlying.exe --run-id=05271 --train
+
+- 訓練時將檔案BUILD出來位置為 env_name 
+    訓練時CMD的指令在ML-agent0.5a的資料夾下
+
+
+- <trainer-config-file>為training_config檔案放置位置
+- --env= unity build出來的執行檔位置
+- --run-id 為這次訓練的名稱
+- --train 為訓練
+若之前有訓練了就使用—load來load之前訓練的模型，--run-id要和之前訓練的模型相同
+
+註：版本必須為5.0a才能跑，不然就需要升級這個project ml-agents版本
+
+# Training Config 參數
+~~~
+    trainer: ppo
+    batch_size: 1024 
+    beta: 1.0e-2
+    buffer_size: 10240 
+    epsilon: 0.2
+    gamma: 0.99
+    hidden_units: 128 
+    lambd: 0.99 
+    learning_rate: 3.0e-4
+    max_steps: 300.0e5
+    memory_size: 256
+    normalize: true #false
+    num_epoch: 3
+    num_layers: 2 
+    time_horizon: 64
+    sequence_length: 32
+    summary_freq: 10000
+    use_recurrent: true
+    use_curiosity: false
+    curiosity_strength: 0.01
+    curiosity_enc_size: 256 
+~~~
