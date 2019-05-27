@@ -140,22 +140,27 @@ public class DroneAgent2 : Agent {
 
 
         //print(relativeRotation);
-        //if (relativeRotation < 0 && Mathf.Abs(relativeRotation) > 3)
-        //{
-        //    DM.Rotation(-0.1f);
-        //}
-        //else if (relativeRotation > 0 && Mathf.Abs(relativeRotation) > 3)
-        //{
-        //    DM.Rotation(0.1f);
-        //}
-        //if (Target.transform.position.y > this.transform.position.y)
-        //{
-        //    DM.PropellerForce(directionZ, 0, 0.5f);
-        //}
-        //else if (Target.transform.position.y < this.transform.position.y)
-        //{
-        //    DM.PropellerForce(directionZ, 0, 0.3f);
-        //}
+
+		//faster trainning only for level 1
+
+        if (relativeRotation < 0 && Mathf.Abs(relativeRotation) > 3)
+        {
+            DM.Rotation(-0.1f);
+        }
+        else if (relativeRotation > 0 && Mathf.Abs(relativeRotation) > 3)
+        {
+            DM.Rotation(0.1f);
+        }
+        if (Target.transform.position.y > this.transform.position.y)
+        {
+            DM.PropellerForce(directionZ, 0, 0.5f);
+        }
+        else if (Target.transform.position.y < this.transform.position.y)
+        {
+            DM.PropellerForce(directionZ, 0, 0.3f);
+        }
+
+
         //if(absReRo > 90){
         //    AddReward(-0.001f*absReRo);
         //}
@@ -194,47 +199,32 @@ public class DroneAgent2 : Agent {
         AddReward(-0.0001f*timer);
 
 
-        //if (absReRo < previousRotation)
-        //{
-        //    AddReward(0.0001f);
-        //}
-        //if (absReRo > previousRotation)
-        //{
-        //    AddReward(-0.0001f);
-        //}
-         
-        //if(distanceToTarget > previousDistance){
-        //    AddReward(-0.003f);
-        //}
 
-
-  //      if (this.transform.position.y < -3.0 ||
-  //          this.transform.position.y > 60
-  //          ||
-  //          Mathf.Abs(this.transform.localPosition.z) > 180||
-  //          Mathf.Abs(this.transform.localPosition.x) > 180
-  //         )
-		//{
+        if (this.transform.position.y < -3.0 ||this.transform.position.y > 60||
+            Mathf.Abs(this.transform.localPosition.z) > 120||
+            Mathf.Abs(this.transform.localPosition.x) > 100
+           )
+		{
             
-  //          SetReward(-60f);
-  //          //resetTarget();
-  //          timer = 0;
-  //          t = 0;
-  //          Done();
+            SetReward(-60f);
+  //         //resetTarget();
+            timer = 0;
+            t = 0;
+            Done();
 
-		//}
-        //if (timer > 30+failcount * 2)
-        //{
-        //    AddReward(-40f);
-        //    timer = 0;
-        //    t = 0;
-        //    failcount += 1;
-        //    Done();
-        //    resetTarget();
+		}
+        if (timer > 30+failcount * 2)
+        {
+            AddReward(-40f);
+            timer = 0;
+            t = 0;
+            failcount += 1;
+            Done();
+            resetTarget();
 
         //    //AddReward(-0.00001f * Mathf.Pow((timer - 30), 2));
  
-        //}
+        }
         if(failcount > 5){
             resetTarget();
             failcount = 0;
@@ -263,7 +253,7 @@ public class DroneAgent2 : Agent {
         //Target.localPosition = new Vector3(Random.Range(-80, 80), Random.Range(1, 30), Random.Range(40, 110));
         //if (xx % 2 == 0)
         //{
-        Target.localPosition = new Vector3(Random.Range(-80, 80), Random.Range(20, 30), Random.Range(50, 100));
+        Target.localPosition = new Vector3(Random.Range(-30, 30), Random.Range(20, 30), Random.Range(50, 80));
         //}
         //else
         //{
@@ -354,9 +344,9 @@ public class DroneAgent2 : Agent {
     }
 	private void OnTriggerEnter(Collider other)
 	{
-        if(other.gameObject.tag == "Target"){
-            forDemo();
-        }
+        //if(other.gameObject.tag == "Target"){
+          //  forDemo();
+        //}
         //if (other.gameObject.tag == "Block")
         //{
             
@@ -380,12 +370,12 @@ public class DroneAgent2 : Agent {
 
         }
     }
-    void forDemo(){
-        goalcount += 1;
-        if(goalcount > 5){
-            Done();
-            goalcount = 0;
-        }
-        resetTarget();
-    }
+    //void forDemo(){
+      //  goalcount += 1;
+        //if(goalcount > 5){
+          //  Done();
+            //goalcount = 0;
+     //   }
+       // resetTarget();
+    //}
 }
